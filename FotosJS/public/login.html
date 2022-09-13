@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotosJS</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="bodyLogin" >
+
+    <div class="container">
+        <div class="row " >
+            <div class="section"></div>
+            <main>
+                <center>
+                    <div class="container">
+                        <br><br><br>
+                        <form action="/login" method="POST"> <!-- Change The Form Method From Here-->
+                            <div class="card-panel z-depth-5 grey darken-4">
+                        
+                                <!-- Form Logo Section  -->
+                        
+                                <div class="row margin">
+                                    <div class="col s12 m12 l12 center">
+                                        <img src="Images/Logotipo_blanco.png"
+                                         alt="" class="responsive-img" style="width:300px;">
+                                        
+                                    </div>
+                                </div>
+                        
+                                <!-- Form Username Input Section -->
+                        
+                                <div class="col s11 m11 l11">
+                                    <div class="input-field">
+                                        <i class="material-icons prefix"></i>
+                                        <input class="white-text" type="text" name="username" id="username">
+                                        <label for="username">Usuario</label>
+                                    </div>
+                                </div>
+                        
+                                <!-- Form Password Input Section -->
+                        
+                                <div class="col m11 l11">
+                                    <div class="input-field">
+                                        <i class="material-icons prefix"></i>
+                                        <input class="white-text" type="password" name="password" id="password">
+                                        <label for="password">Contraseña</label>
+                                    </div>
+                                </div>
+                        
+                                    <!-- Form Chekbox (Remember Me) Input Section -->
+                        
+                               
+                                
+                        
+                                    <!-- Form Button Section  -->
+                        
+                                <div class="center">
+                                    <input type="submit" value="Login" name="login" 
+                                    class="btn  black-text white waves-effect waves-dark   ">
+                                </div>
+                        
+                                    <!-- Form "Register Now" And "Forgot Password" Link Section. -->
+                        
+                                
+                            </div>
+                        </form>
+                    </div>
+                </center>
+            </main>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+        </div>
+    </div>
+</body>
+</html>

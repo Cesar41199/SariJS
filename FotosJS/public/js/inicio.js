@@ -1,0 +1,58 @@
+function llenartabla() {
+    try{
+    fetch('http://localhost:3002/tablaProvedores')
+    .then((response) => response.json())
+    .then((tabla)=>{
+      //console.log(usuarios)
+      let conteo= 1
+      let tablaUsuario = document.querySelector('#tabla-inicio tbody');
+      
+      //console.log(idAlarma_inf);
+      for (const tablafotos of tabla) {
+        
+        if(tablafotos.fecha == null){
+          
+          tablafotos.fecha = 'Sin asignar'
+        }else{
+          tablafotos.fecha = tablafotos.fecha.substring(0,10)
+        }
+
+        if(conteo%2==0){
+          let tr = " <tr class='other-row'> <td>"+conteo+"</td>" + 
+          "<td><form action='/fotosantes' method=GET id='formulario"+conteo+"'> <input type='hidden' name='idRedJalisco' value='"+tablafotos.idRedJalisco+"'><a href='javascript:enviar_formulario(formulario"+conteo+")'>"+ tablafotos.idRedJalisco +"</a></form></td>" +
+        "<td>"+tablafotos.nombreEstatus+"</td>"+
+        "<td>"+tablafotos.nombreEstatus+"</td>" +
+        "<td>" + tablafotos.fecha+ "</td> </tr>" 
+
+        tablaUsuario.innerHTML +=  tr;
+
+        conteo = conteo + 1;
+        }else{
+          let tr = " <tr class='active-row'> <td>"+conteo+"</td>" + 
+          "<td><form action='/fotosantes' method=GET id='formulario"+conteo+"'> <input type='hidden' name='idRedJalisco' value='"+tablafotos.idRedJalisco+"'><a href='javascript:enviar_formulario(formulario"+conteo+")'>"+ tablafotos.idRedJalisco +"</a></form></td>" +
+          "<td>"+tablafotos.nombreEstatus+"</td>"+
+          "<td>"+tablafotos.nombreEstatus+"</td>" +
+          "<td>" + tablafotos.fecha + "</td> </tr>" 
+  
+          tablaUsuario.innerHTML +=  tr;
+  
+          conteo = conteo + 1;
+        }
+        
+      
+      }
+    })
+  }catch(e){
+    console.log(e)
+  }
+  }
+  llenartabla()
+
+  
+  function enviar_formulario(formulario){
+    
+    formulario.submit()
+      
+    
+    
+  }
