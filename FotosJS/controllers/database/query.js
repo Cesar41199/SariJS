@@ -24,5 +24,8 @@ const queries = {
     getTableproveedores: 'select TOP 50 core_sitios_abonados.idRedJalisco,fechaAmpliacion,core_estatus_sitio.nombreEstatus,core_sariestatus.estatusInfo from core_sitios_abonados inner join core_estatus_sitio on core_sitios_abonados.idEstatus_sitio_id = core_estatus_sitio.idEstatus_sitio inner join core_sariestatus on core_sitios_abonados.idRedJalisco=core_sariestatus.idRedJalisco_id  where core_sitios_abonados.proveedorAmpliacion = @proveedor ', 
     getTableEtiquetas: "select * from core_sarisitios where Fecha = '2022-09-20'",   
     getEstatusFotos:'select estatusSave from core_sariestatus where idRedJalisco_id = @id', 
+    getTableproveedores: 'select TOP 50 idRedJalisco,fecha,core_estatus_sitio.nombreEstatus from core_sitios_abonados inner join core_estatus_sitio on core_sitios_abonados.idEstatus_sitio_id = core_estatus_sitio.idEstatus_sitio  where core_sitios_abonados.proveedor = @proveedor ',    
+    datosfotosAdminRevisar: "select idSARIfotos,base64,estatus,nombre from core_sarifotos where idSARIestatus_id=1 order by estatus,nombre",
+    borrarfotoAdminRevisar: "delete from core_sarifotos where idSARIfotos=@id",
 }
 exports.queries = queries

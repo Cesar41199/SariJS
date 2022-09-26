@@ -462,7 +462,37 @@ const document = this;
             } catch (error) {
                 console.log(`Error en la extraccion de informacion de INICIO: ${error}`)
             }
+        }
+       
+        const datosfotosAdminRevisar = async(req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request().query(queries.datosfotosAdminRevisar)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+
+            } catch (error) {
+                console.log(`Error en la extraccion de mas datosfotosAdminRevisar: ${error}`)
+            }
+        };
+
         
+        const borrarfotoAdminRevisar = async(idImagenEliAdmin,req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request()
+                .input("id",sql.Int,idImagenEliAdmin)
+                .query(queries.borrarfotoAdminRevisar)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+
+            } catch (error) {
+                console.log(`Error en la extraccion de mas datosfotosAdminRevisar: ${error}`)
+            }
         };
         
     
@@ -486,3 +516,5 @@ const document = this;
     exports.SelectidEstatus = SelectidEstatus
     exports.Infousuario = Infousuario
     exports.CheckEstatus = CheckEstatus
+    exports.datosfotosAdminRevisar = datosfotosAdminRevisar
+    exports.borrarfotoAdminRevisar = borrarfotoAdminRevisar

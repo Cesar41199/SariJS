@@ -5,7 +5,9 @@ const bodyParser = require('body-parser')
 const http = require("http")
 const multer = require('multer')
 const puerto = 3002
-const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus} = require ('./controllers/database')
+
+const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,cerrarEvento,datosfotosAdminRevisar,borrarfotoAdminRevisar} = require ('./controllers/database')
+
 
 const { Console } = require('console')
 const { response } = require('express')
@@ -254,6 +256,36 @@ function server(){
         }
       })
 
+      
+      app.get('/fotosAdminRevisar', (req, res) => {
+        res.sendFile(path.resolve(__dirname,'public/fotosAdminRevisar.html'));
+      })
+
+      
+      app.get('/datosfotosAdminRevisarVista',(req,res)=>{
+        try {
+          datosfotosAdminRevisar()
+          .then((inf)=>{
+            res.json(inf)
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      })
+
+      app.post('/borrarFotoAdmin',(req,res)=>{
+        try {
+          const{idImagenEliAdmin} = req.body;
+
+          borrarfotoAdminRevisar(idImagenEliAdmin)
+          .then((infEliFoto)=>{
+            res.redirect('/fotosAdminRevisar')
+          })
+
+        } catch (error) {
+          console.log(error)
+        }
+      })
 
       app.post('/photoDB',upload.single('ProductImage'),(req,res)=>{
         image1 = req.file.buffer.toString('base64')      
