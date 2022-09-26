@@ -7,7 +7,7 @@ const rondas = 3;
 const document = this;
 
 
-    function hash(username,password){
+    function hash(nombre,apellidos,username,password,correo,empresa,tipo){
         
         bcrypct.hash(password, rondas, (err, pass) =>{
             if(err){
@@ -15,8 +15,8 @@ const document = this;
             }else{
               console.log('hasheado') 
             }
-            const  id = 1
-            createUser(id,username,pass)
+            
+            createUser(nombre,apellidos,username,pass,correo,empresa,tipo)
         })
         
     }
@@ -40,7 +40,8 @@ const document = this;
     })
         
     }
-    const modificarEvento = async (id,estatus,req,res)=>{
+
+    const modificarEvento = async (id,info,estatus,req,res)=>{
        
         //console.log(`Id desde el connect ${id}`);
         try {
@@ -49,12 +50,36 @@ const document = this;
             
             const result = await pool.request()
                 .input("id",sql.VarChar,id)
+                .input("info",sql.VarChar,info)
                 .input("estatus",sql.VarChar,estatus)
                // .query(queries.verEvento)
                 .query(queries.query_modificarEvento)
                 //console.log(result);
             return new Promise((resolver,reject)=>{
                 resolver(result['recordset'])
+            })
+    
+        } catch (error) {
+            console.log(`Error en la extraccion de Modificar Evento: ${error}`)
+        }
+    
+    }
+    const SelectidEstatus = async (idRedJalisco,req,res)=>{
+       
+        //console.log(`Id desde el connect ${id}`);
+        try {
+            const pool = await getConnection();
+            console.log("1"+idRedJalisco+"1")
+            
+            const result = await pool.request()
+                .input("idRedJalisco",sql.VarChar,idRedJalisco)
+               
+               // .query(queries.verEvento)
+                .query(queries.select_idEstatus)
+                //console.log(result);
+            return new Promise((resolver,reject)=>{ 
+                console.log(result)
+                resolver(result['recordset'][0]['idSARIestatus'])
             })
     
         } catch (error) {
@@ -103,6 +128,28 @@ const document = this;
     }
 
     };
+    const CheckEstatus = async  (id,req, res) => {
+        try {
+            
+            const pool = await getConnection();
+        
+            const result = await pool.request()
+            .input("id",sql.VarChar,id)
+            .query(queries.getEstatusFotos)
+           // (result['recordset'][0]['Password'])
+           
+           return new Promise ((resolve,reject)=>{
+        
+             resolve(result['recordset'][0]['estatusSave'])
+           })
+        
+        } catch (error) {
+            
+            console.log(error);
+        }
+    
+        };
+
     
     const getPassword = async (username,password,res,req) => {  
        
@@ -112,16 +159,37 @@ const document = this;
         
        
         return new Promise((resolve, reject) =>{
-            
-                
-            login(password,result['recordset'][0]['Password']).then((resultado)=>{
+          
+            try{
+            login(password,result['recordset'][0]['contraseña']).then((resultado)=>{
             setTimeout(()=>{
                 resolve(resultado)
              
-            },1500)
+            },500)
             })
+        }catch(error){
+            resultado = false
+            resolve(resultado)
+        }
+     
             
-            
+        })     
+        
+        }catch(error){
+                console.log(error)
+        }
+      
+     
+    }
+    const   Infousuario = async (username,res,req) => {  
+       
+        try{
+        const pool = await getConnection()
+        const result = await pool.request().input("username", username).query(queries.infoUser)
+        
+       
+        return new Promise((resolve, reject) =>{    
+                resolve(result['recordset']) 
         })     
         
         }catch(error){
@@ -132,22 +200,25 @@ const document = this;
     }
 
 
-    const createUser = async (id,username,password,req, res) => {
+
+
+    const createUser = async (nombre,apellidos,username,password,correo,empresa,tipo,req, res) => {
     
-    if(username == null || password == null || id == null){
-        return res.status(400).json({msg: "BAD REQUEST"})
-    }
     
-    if (id == null) id = 0;
+    
     try{
         const pool = await getConnection();
     
         await pool.request()
-        .input("name", sql.Text,username)
+        .input("nombre", sql.Text,nombre)
+        .input("apellidos", sql.Text,apellidos)
+        .input("username", sql.Text,username)
         .input("password", sql.Text,password)
-        .input("id", sql.Int,id)
+        .input("correo", sql.Text,correo)
+        .input("empresa", sql.Text,empresa)
+        .input("tipo", sql.Text,tipo)
         .query(
-            queries.createProduct
+            queries.createUser
             )
         
         
@@ -157,23 +228,18 @@ const document = this;
     }
     }
 
-    const Imageupload = async (IdEvento,cam,image1,req, res) => {
-    
-        if(IdEvento == null || cam == null || image1 == null ){
-            return res.status(400).json({msg: "BAD REQUEST"})
-        }
+    const Imageupload = async (imagen,estatus,nombre,idSitio,req, res) => {       
         
-        if (IdEvento == null) IdEvento = 0;
         try{
             const pool = await getConnection();
-            console.log('Imageupload')
+            
             await pool.request()
-            .input("IdEvento", sql.Int,IdEvento)
-            .input("cam", sql.Text,cam)
-            .input("image1", sql.VarChar,image1)
-            .query(
-                queries.UploadImage
-                )
+            .input("imagen", sql.VarChar,imagen)
+            .input("estatus", sql.VarChar,estatus)
+            .input("nombre", sql.VarChar,nombre)
+            .input("idSitio", sql.Int,idSitio)
+            .query(queries.UploadImage)
+            console.log('Imageupload')
             
             
         } catch(error) {
@@ -370,6 +436,34 @@ const document = this;
             }
         
         };
+
+        const getInformacion_Etiquetas = async (req,res)=>{
+            
+            try {
+                
+                const pool = await getConnection()
+                const result = await pool.request()
+                
+                .query(queries.getTableEtiquetas)
+                //console.log(result)
+                //res.json(result.recordset)
+        
+                return new Promise((resolve,reject)=>{
+                    resolve(result['recordset']);
+                })
+        
+                //return res.request(result);
+        
+                //return res.send(result.recordset);
+        
+        
+                //res.send('index',{result});
+                //res.json(result.recordset)
+            } catch (error) {
+                console.log(`Error en la extraccion de informacion de INICIO: ${error}`)
+            }
+        
+        };
         
     
     exports.getProducts = getProducts
@@ -388,3 +482,7 @@ const document = this;
     exports.Top10Suc=Top10Suc
     exports.modificarEvento = modificarEvento
     exports.cerrarEvento = cerrarEvento
+    exports.getInformacion_Etiquetas = getInformacion_Etiquetas
+    exports.SelectidEstatus = SelectidEstatus
+    exports.Infousuario = Infousuario
+    exports.CheckEstatus = CheckEstatus

@@ -19,7 +19,7 @@
     <nav class="grey darken-4 nav-extended row ">
         <div class="nav-wrapper container col s12">
             
-          <a href="/inicio" class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
+          <a  class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
             
             
             <ul class="left">
@@ -30,23 +30,31 @@
                 
                 
                 
-            </ul>          
+            </ul>       
+            <div class="col s1 right">
+                <form action="/exit" method="post">
+                    <button class="btn grey darken-2" type="submit" >SALIR</button>
+                </form>
+            </div>    
                 
                 
         </div>
         <div class="nav-content col s12">
             <ul class="tabs tabs-transparent col s12">
-              <li class="tab col s6"><a href="/inicio">Inicio</a></li>
-              <li class="tab col s6"><a href="/etiquetas">Etiquetas</a></li>
+                <li class="tab col s6"><a href="/fotos">Fotos</a></li>
             
             </ul>
           </div>
     </nav>
+    <!--PRUEBA IMAGENES-->
+    <div>
+
+    </div>
     <div class="container grey darken-3 ">
         
             <div class="row">
                 <div class="col s12">
-                    <h6 id="head" class="white-text" style="text-align:right;font-family: 'Franklin Gothic Medium';">{nombre}</h6>
+                    <h6 id="idRedJalisco" class="white-text" style="text-align:right;font-family: 'Franklin Gothic Medium';">idRedJalisco</h6>
                 </div>
                 <div class="col s12">
                     
@@ -55,9 +63,10 @@
                 
                 </div>
                 <!--dIV IMAGENES-->
-            <form action="modificarEventoAntes"  id="formimage" method="POST">
+            <form action="/modificarEventoAntes"  id="formimage" method="POST" enctype="multipart/form-data">
                 <div class=" col s4 offset-s1 input-field">
-                <input disabled value="Fachada de Sitio" name="input1" id="" type="text" class="validate white-text">
+                <input disabled value="Fachada de Sitio" id="input1" type="text" class="validate white-text">
+                <input hidden value="Fachada de Sitio" name="input1"  type="text" >
                 
                 </div>
                 <div class="col s3">
@@ -70,7 +79,7 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image1" id="image1" class="file-path validate" type="file" accept="image/*" multiple >
+                                        <input type="file" name="imagen1" id="image1" class="file-path"  accept="image/*" multiple >
                                     </div> 
                                     <img hidden src="./Images/check2.png" id="check1" alt="" width="35px" height="35px" style="padding-left:5px ;">                                 
                             </div>                          
@@ -84,7 +93,8 @@
             
                 <div class="col s4 offset-s1 input-field">
                     
-                    <input disabled value="Vista Gral. de Área de Switch" name="input2" type="text" class="validate white-text">
+                    <input disabled value="Vista Gral. de Área de Switch"  type="text" class="validate white-text">
+                    <input hidden value="Vista Gral. de Área de Switch" name="input2" type="text" >
                     
                 </div>
             
@@ -99,8 +109,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image2" id="image2" class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input name="imagen2" id="image2" class="file-path validate" type="file" accept="image/*" multiple>
+                                    </div>
+                                    <img hidden src="./Images/check2.png" id="check2" alt="" width="35px" height="35px" style="padding-left:5px ;">                                  
                             </div>                          
                             </div>
                        
@@ -111,7 +122,8 @@
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
-            <p name="input3" class="white-text"style="font-size:medium ;">Vista Gral. y Acercamiento de Equipo Existente</p>
+            <p  class="white-text"style="font-size:medium ;">Vista Gral. y Acercamiento de Equipo Existente</p>
+            <input hidden value="Vista Gral. y Acercamiento de Equipo Existente" name="input3" type="text" >
                 
             </div>
             <div class="col s3">
@@ -124,8 +136,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image3" id="image3" class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input name="imagen3" id="image3" class="file-path validate" type="file" accept="image/*" multiple>
+                                    </div>   
+                                    <img hidden src="./Images/check2.png" id="check3" alt="" width="35px" height="35px" style="padding-left:5px ;">                               
                             </div>                          
                             </div>
                         
@@ -136,7 +149,8 @@
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
-                <input disabled value="Vistas Gral. de Área de AP" name="input4" id="" type="text" class="validate white-text">
+                <input disabled value="Vistas Gral. de Área de AP"  id="" type="text" class="validate white-text">
+                <input hidden value="Vistas Gral. de Área de AP" name="input4"  type="text" >
                 
             </div>
             <div class="col s3">
@@ -149,8 +163,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image4" id="image4" class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input name="imagen4" id="image4" class="file-path validate" type="file" accept="image/*" multiple>
+                                    </div>   
+                                    <img hidden src="./Images/check2.png" id="check4" alt="" width="35px" height="35px" style="padding-left:5px ;">                               
                             </div>                          
                             </div>
                        
@@ -160,7 +175,8 @@
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
-                <input disabled value="Switch" name="input5" id="" type="text" class="validate white-text">
+                <input disabled value="Switch"  id="" type="text" class="validate white-text">
+                <input hidden value="Switch" name="input5" id="" type="text" >
                 
             </div>
             <div class="col s3">
@@ -173,8 +189,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image5" id="image5" class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input name="imagen5" id="image5" class="file-path validate" type="file" accept="image/*" multiple>
+                                    </div>
+                                    <img hidden src="./Images/check2.png" id="check5" alt="" width="35px" height="35px" style="padding-left:5px ;">                                  
                             </div>                          
                             </div>
                        
@@ -184,8 +201,8 @@
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
-                <input disabled value="Access Points" id="" name="input6" type="text" class="validate white-text">
-                
+                <input disabled value="Access Points" id=""  type="text" class="validate white-text">
+                <input hidden value="Access Points" id="" name="input6" type="text" >
             </div>
             <div class="col s3">
                 <p class="white-text">(3 Imágenes) Equipo Access Point, para validar las condiciones físicas antes de la instalación, dos ángulos distintos donde se muestre el frente y la parte posterior del equipo, finalmente una imagen mas del puerto RJ-45 a utilizar.</p>
@@ -197,8 +214,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image6" id="image6" class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input name="imagen6" id="image6" class="file-path validate" type="file" accept="image/*" multiple>
+                                    </div>     
+                                    <img hidden src="./Images/check2.png" id="check6" alt="" width="35px" height="35px" style="padding-left:5px ;">                             
                             </div>                          
                             </div>
                        
@@ -208,7 +226,8 @@
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
-                <input disabled value="Elementos Pasivos" id="" name="input7" type="text" class="validate white-text">
+                <input disabled value="Elementos Pasivos" id=""  type="text" class="validate white-text">
+                <input hidden value="Elementos Pasivos" id="" name="input7" type="text" >
                 
             </div>
             <div class="col s3">
@@ -221,8 +240,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input name="image7" id="image7" class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input name="imagen7" id="image7" class="file-path validate" type="file" accept="image/*" multiple>
+                                    </div>  
+                                    <img hidden src="./Images/check2.png" id="check7" alt="" width="35px" height="35px" style="padding-left:5px ;">                                
                             </div>                          
                             </div>
                           
@@ -233,7 +253,8 @@
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
-                <input disabled value="Etiqueta Series Switch/AP/Pasivo" name="image8" id="" type="text" class="validate white-text">
+                <input disabled value="Etiqueta Series Switch/AP/Pasivo"  id="" type="text" class="validate white-text">
+                <input hidden value="Etiqueta Series Switch/AP/Pasivo" name="input8" id="" type="text" >
                 
             </div>
             <div class="col s3">
@@ -246,8 +267,9 @@
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input class="file-path validate" name="image8" id="image8" type="file" accept="image/*" multiple>
-                                    </div>                                  
+                                        <input class="file-path validate" name="imagen8" id="image8" type="file" accept="image/*" multiple>
+                                    </div> 
+                                    <img hidden src="./Images/check2.png" id="check8" alt="" width="35px" height="35px" style="padding-left:5px ;">                                 
                             </div>                          
                             </div>
                         
@@ -255,7 +277,7 @@
                 </div>
             
             <!--dIV IMAGENES-->
-            <input type="hidden" value="M-JCSSA005053" name="idsitio" id="idSitio">
+            <input type="hidden" value="" name="idsitio" id="idsitio">
             <input type="hidden" value="Antes" name="estatus" id="estatus">
         </form>
             
@@ -264,9 +286,14 @@
                 <div class="col s2 offset-s10"> 
  
                        
-                        <button class="btn waves-effect waves-light" form="formimage" type="submit" >Guardar
+                        <button  class="btn waves-effect waves-light" onclick="validar()" type="button" >Guardar
                             <i class="material-icons right">send</i>
-                        </button>                        
+                        </button> 
+                       
+                        <button id="btnGuardar" class="btn waves-effect waves-light" form="formimage" type="submit" >Guardar
+                            <i class="material-icons right">send</i>
+                        </button>  
+                                              
                     
                 </div>
             </div>

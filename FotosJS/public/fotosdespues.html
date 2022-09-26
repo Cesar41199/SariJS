@@ -12,13 +12,14 @@
 
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="js/jQuery.js"></script>
 </head>
 <body>
     <!-- MENU  -->
     <nav class="grey darken-4 nav-extended row ">
         <div class="nav-wrapper container col s12">
             
-          <a href="/inicio" class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
+          <a  class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
             
             
             <ul class="left">
@@ -30,13 +31,16 @@
                 
                 
             </ul>          
-                
+            <div class="col s1 right">
+                <form action="/exit" method="post">
+                    <button class="btn grey darken-2" type="submit" >SALIR</button>
+                </form>
+            </div>    
                 
         </div>
         <div class="nav-content col s12">
             <ul class="tabs tabs-transparent col s12">
-              <li class="tab col s6"><a href="/inicio">Inicio</a></li>
-              <li class="tab col s6"><a href="/etiquetas">Etiquetas</a></li>
+                <li class="tab col s6"><a href="/fotos">Fotos</a></li>
             
             </ul>
           </div>
@@ -44,7 +48,7 @@
     <div class="container grey darken-3 ">
         <div class="row">
             <div class="col s12">
-                <h6 id="head" class="white-text" style="text-align:right;font-family: 'Franklin Gothic Medium';">M-JCSSA005053</h6>
+                <h6 id="idRedJalisco" class="white-text" style="text-align:right;font-family: 'Franklin Gothic Medium';">idRedJalisco</h6>
             </div>
             <div class="col s12">
                 
@@ -53,25 +57,28 @@
             
             </div>
             <!--dIV IMAGENES-->
+            <form action="/modificarEventoDespues"  id="formimage" method="POST" enctype="multipart/form-data">
             <div class=" col s4 offset-s1 input-field">
               <input disabled value="Acercamiento conectores RJ45" id="" type="text" class="validate white-text">
+              <input hidden value="Acercamiento conectores RJ45" name="input1" type="text" >
               
             </div>
             <div class="col s3">
                 <p class="white-text">(6 Imágenes x tirada de cable) Acercamiento a conectores RJ-45 ya ponchados por la parte frontal y lateral del plug donde se muestre que los pares del UTP se encuentran correctamente sujetados y hasta el tope del conector, iniciando con una foto teniendo de referencia la etiqueta impresa del cable. Esto en ambas puntas del cable UTP (3 imágenes x punta).</p>
                 </div>
                 <div class="col s4">                
-                    <div class="col s12">  
-                        <form action="#">
+                    <div class="col s8">  
+                       
                             <div class="file-field input-field">
                                 <div class="file-path-wrapper">
                                     <div class="btn black-text white">
                                         <span>Imagen</span>
-                                        <input class="file-path validate" type="file" accept="image/*" multiple>
-                                    </div>                                  
-                              </div>                          
+                                        <input type="file" name="imagen1" id="image1" class="file-path"  accept="image/*" multiple >
+                                    </div> 
+                                    <img hidden src="./Images/check2.png" id="check1" alt="" width="35px" height="35px" style="padding-left:5px ;">                                 
+                            </div>                          
                             </div>
-                        </form>
+                      
                     </div>                
                 </div>
             
@@ -80,23 +87,24 @@
         <!--dIV IMAGENES-->
         <div class=" col s4 offset-s1 input-field">
             <input disabled value="Prueba de continuidad UTP" id="" type="text" class="validate white-text">
-            
+            <input hidden value="Prueba de continuidad UTP" name="input2" type="text" >
           </div>
           <div class="col s3">
             <p class="white-text">(1 Imagen x tirada de cable ó 1 video de 5seg máximo) Imagen de la pantalla o leds de equipo probador de RJ45, donde se muestre que todos y cada uno de los pares de línea no presentan errores de continuidad. En caso de tener un equipo de leds donde solo muestren un par a la vez, será necesario tomar un video no mayor a 5seg sonde se muestren todos los pares sin errores de continuidad.</p>
             </div>
             <div class="col s4">                
                 <div class="col s12">  
-                    <form action="#">
+                    
                         <div class="file-field input-field">
                             <div class="file-path-wrapper">
                                 <div class="btn black-text white">
-                                    <span>Archivo</span>
-                                    <input class="file-path validate" type="file" accept="image/*" multiple>
-                                </div>                                  
-                          </div>                          
+                                    <span>Video</span>
+                                    <input name="imagen2" id="image2" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>
+                                <img hidden src="./Images/check2.png" id="check2" alt="" width="35px" height="35px" style="padding-left:5px ;">                                  
+                        </div>                          
                         </div>
-                    </form>
+                   
                 </div>                
             </div>
           
@@ -104,6 +112,7 @@
         <!--dIV IMAGENES-->
         <div class=" col s4 offset-s1 input-field">
             <input disabled value="Rutas de Cableado Ext/Int" id="" type="text" class="validate white-text">
+            <input hidden value="Rutas de Cableado Ext/Int" name="input3" type="text" >
             
           </div>
           <div class="col s3">
@@ -111,16 +120,17 @@
             </div>
             <div class="col s4">                
                 <div class="col s12">  
-                    <form action="#">
+                   
                         <div class="file-field input-field">
                             <div class="file-path-wrapper">
                                 <div class="btn black-text white">
                                     <span>Imagen</span>
-                                    <input class="file-path validate" type="file" accept="image/*" multiple>
-                                </div>                                  
-                          </div>                          
+                                    <input name="imagen3" id="image3" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>   
+                                <img hidden src="./Images/check2.png" id="check3" alt="" width="35px" height="35px" style="padding-left:5px ;">                               
+                        </div>                          
                         </div>
-                    </form>
+                    
                 </div>                
             </div>
           
@@ -128,6 +138,7 @@
         <!--dIV IMAGENES-->
         <div class=" col s4 offset-s1 input-field">
             <input disabled value="Acometida aérea" id="" type="text" class="validate white-text">
+            <input hidden value="Acometida aérea" name="input4" type="text" >
             
           </div>
           <div class="col s3">
@@ -135,22 +146,24 @@
             </div>
             <div class="col s4">                
                 <div class="col s12">  
-                    <form action="#">
+                    
                         <div class="file-field input-field">
                             <div class="file-path-wrapper">
                                 <div class="btn black-text white">
                                     <span>Imagen</span>
-                                    <input class="file-path validate" type="file" accept="image/*" multiple>
-                                </div>                                  
-                          </div>                          
+                                    <input name="imagen4" id="image4" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>   
+                                <img hidden src="./Images/check2.png" id="check4" alt="" width="35px" height="35px" style="padding-left:5px ;">                               
+                        </div>                          
                         </div>
-                    </form>
+                   
                 </div>                
             </div>
         <!--dIV IMAGENES-->
         <!--dIV IMAGENES-->
         <div class=" col s4 offset-s1 input-field">
             <input disabled value="Pases de Muro/Loza" id="" type="text" class="validate white-text">
+            <input hidden value="Pases de Muro/Loza" name="input5" type="text" >
             
           </div>
           <div class="col s3">
@@ -158,16 +171,17 @@
             </div>
             <div class="col s4">                
                 <div class="col s12">  
-                    <form action="#">
+                    
                         <div class="file-field input-field">
                             <div class="file-path-wrapper">
                                 <div class="btn black-text white">
                                     <span>Imagen</span>
-                                    <input class="file-path validate" type="file" accept="image/*" multiple>
-                                </div>                                  
-                          </div>                          
+                                    <input name="imagen5" id="image5" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>
+                                <img hidden src="./Images/check2.png" id="check5" alt="" width="35px" height="35px" style="padding-left:5px ;">                                  
+                        </div>                          
                         </div>
-                    </form>
+                   
                 </div>                
             </div>
           
@@ -175,46 +189,147 @@
         <!--dIV IMAGENES-->
         <div class=" col s4 offset-s1 input-field">
             <input disabled value="Impermeabilización" id="" type="text" class="validate white-text">
-            
+            <input hidden value="Impermeabilización" name="input6" type="text" >
           </div>
           <div class="col s3">
             <p class="white-text">(Las imágenes que sean necesarias x tirada de cable) En caso de que se realice cableado por la azotea del inmueble. vista general y acercamiento en  a las grapas que sujetan el cableado donde se muestre que se coloco correctamente el impermeabilizante.</p>
             </div>
             <div class="col s4">                
                 <div class="col s12">  
-                    <form action="#">
+                    
                         <div class="file-field input-field">
                             <div class="file-path-wrapper">
                                 <div class="btn black-text white">
                                     <span>Imagen</span>
-                                    <input class="file-path validate" type="file" accept="image/*" multiple>
-                                </div>                                  
-                          </div>                          
+                                    <input name="imagen6" id="image6" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>     
+                                <img hidden src="./Images/check2.png" id="check6" alt="" width="35px" height="35px" style="padding-left:5px ;">                             
+                        </div>                          
                         </div>
-                    </form>
+                   
                 </div>                
             </div>
         <!--dIV IMAGENES-->
-        
+        <!--dIV IMAGENES-->
+        <div class=" col s4 offset-s1 input-field">
+            <p class="white-text">Identificación Institucional de Encargado de Sitio</p>
+            <input hidden value="Identificación Institucional de Encargado de Sitio" name="input7" type="text" >
+          </div>
+          <div class="col s3">
+            <p class="white-text">(Las imágenes que sean necesarias x tirada de cable) En caso de que se realice cableado por la azotea del inmueble. vista general y acercamiento en  a las grapas que sujetan el cableado donde se muestre que se coloco correctamente el impermeabilizante.</p>
+            </div>
+            <div class="col s4">                
+                <div class="col s12">  
+                    
+                        <div class="file-field input-field">
+                            <div class="file-path-wrapper">
+                                <div class="btn black-text white">
+                                    <span>Imagen</span>
+                                    <input name="imagen7" id="image7" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>     
+                                <img hidden src="./Images/check2.png" id="check7" alt="" width="35px" height="35px" style="padding-left:5px ;">                             
+                        </div>                          
+                        </div>
+                   
+                </div>                
+            </div>
+        <!--dIV IMAGENES-->
+        <!--dIV IMAGENES-->
+        <div class=" col s4 offset-s1 input-field">
+            <p class="white-text">Identificación Institucional de Encargado de la instalación</p>
+            <input hidden value="Identificación Institucional de Encargado de la instalación" name="input8" type="text" >
+          </div>
+          <div class="col s3">
+            <p class="white-text">(Las imágenes que sean necesarias x tirada de cable) En caso de que se realice cableado por la azotea del inmueble. vista general y acercamiento en  a las grapas que sujetan el cableado donde se muestre que se coloco correctamente el impermeabilizante.</p>
+            </div>
+            <div class="col s4">                
+                <div class="col s12">  
+                    
+                        <div class="file-field input-field">
+                            <div class="file-path-wrapper">
+                                <div class="btn black-text white">
+                                    <span>Imagen</span>
+                                    <input name="imagen8" id="image8" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>     
+                                <img hidden src="./Images/check2.png" id="check8" alt="" width="35px" height="35px" style="padding-left:5px ;">                             
+                        </div>                          
+                        </div>
+                   
+                </div>                
+            </div>
+        <!--dIV IMAGENES-->
+        <!--dIV IMAGENES-->
+        <div class=" col s4 offset-s1 input-field">
+            <input disabled value="Pantallas de Configuración Access Point" id="" type="text" class="validate white-text">
+            <input hidden value="Pantallas de Configuración Access Point" name="input9" type="text" >
+          </div>
+          <div class="col s3">
+            <p class="white-text">(Las imágenes que sean necesarias x tirada de cable) En caso de que se realice cableado por la azotea del inmueble. vista general y acercamiento en  a las grapas que sujetan el cableado donde se muestre que se coloco correctamente el impermeabilizante.</p>
+            </div>
+            <div class="col s4">                
+                <div class="col s12">  
+                    
+                        <div class="file-field input-field">
+                            <div class="file-path-wrapper">
+                                <div class="btn black-text white">
+                                    <span>Imagen</span>
+                                    <input name="imagen9" id="image9" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>     
+                                <img hidden src="./Images/check2.png" id="check9" alt="" width="35px" height="35px" style="padding-left:5px ;">                             
+                        </div>                          
+                        </div>
+                   
+                </div>                
+            </div>
+        <!--dIV IMAGENES-->
+        <!--dIV IMAGENES-->
+        <div class=" col s4 offset-s1 input-field">
+            <input disabled value="Pruebas de Tráfico (Speed Test)" id="" type="text" class="validate white-text">
+            <input hidden value="Pruebas de Tráfico (Speed Test)" name="input10" type="text" >
+          </div>
+          <div class="col s3">
+            <p class="white-text">(Las imágenes que sean necesarias x tirada de cable) En caso de que se realice cableado por la azotea del inmueble. vista general y acercamiento en  a las grapas que sujetan el cableado donde se muestre que se coloco correctamente el impermeabilizante.</p>
+            </div>
+            <div class="col s4">                
+                <div class="col s12">  
+                    
+                        <div class="file-field input-field">
+                            <div class="file-path-wrapper">
+                                <div class="btn black-text white">
+                                    <span>Imagen</span>
+                                    <input name="imagen10" id="image10" class="file-path validate" type="file" accept="image/*" multiple>
+                                </div>     
+                                <img hidden src="./Images/check2.png" id="check10" alt="" width="35px" height="35px" style="padding-left:5px ;">                             
+                        </div>                          
+                        </div>
+                   
+                </div>                
+            </div>
+        <!--dIV IMAGENES-->
+        <input type="hidden" value="" name="idsitio" id="idsitio">
+        <input type="hidden" value="Despues" name="estatus" id="estatus">
+        </form>
 
 
           
         </div>
         <div class="row">
-            <div class="col s2 offset-s10">
-                <form action="modificarEventoDespues" method="POST">
-                    <input type="hidden" value="M-JCSSA005053" name="idsitio" id="idSitio">
-                    <input type="hidden" value="Despues" name="estatus" id="estatus">
-                                        
-                    <button class="btn waves-effect waves-light" type="submit" name="action" >Guardar
-                    <i class="material-icons right">send</i>
-                  </button>
+            <div class="col s2 offset-s10"> 
+
+                   
+                    <button  class="btn waves-effect waves-light" onclick="validar()" type="button" >Guardar
+                        <i class="material-icons right">send</i>
+                    </button> 
+                    
+                    <button id="btnGuardar" class="btn waves-effect waves-light" form="formimage" type="submit" >Guardar
+                        <i class="material-icons right">send</i>
+                    </button>  
+                                          
                 
-                </form>
-              </div>
+            </div>
         </div>
     </div>
-    
+    <script type="" src="js/fotosdespues.js" ></script>
     
 </body>
 </html>

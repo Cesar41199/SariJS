@@ -10,29 +10,29 @@ function llenartabla() {
       //console.log(idAlarma_inf);
       for (const tablafotos of tabla) {
         
-        if(tablafotos.fecha == null){
+        if(tablafotos.fechaAmpliacion == null){
           
-          tablafotos.fecha = 'Sin asignar'
+          tablafotos.fechaAmpliacion = 'Sin asignar'
         }else{
-          tablafotos.fecha = tablafotos.fecha.substring(0,10)
+          tablafotos.fechaAmpliacion = tablafotos.fechaAmpliacion.substring(0,10)
         }
 
         if(conteo%2==0){
           let tr = " <tr class='other-row'> <td>"+conteo+"</td>" + 
-          "<td><form action='/fotosantes' method=GET id='formulario"+conteo+"'> <input type='hidden' name='idRedJalisco' value='"+tablafotos.idRedJalisco+"'><a href='javascript:enviar_formulario(formulario"+conteo+")'>"+ tablafotos.idRedJalisco +"</a></form></td>" +
+          "<td><form action='/checkEstatus' method=POST id='formulario"+conteo+"'> <input type='hidden' name='idRedJalisco' value='"+tablafotos.idRedJalisco+"'><a href='javascript:enviar_formulario(formulario"+conteo+")'>"+ tablafotos.idRedJalisco +"</a></form></td>" +
         "<td>"+tablafotos.nombreEstatus+"</td>"+
-        "<td>"+tablafotos.nombreEstatus+"</td>" +
-        "<td>" + tablafotos.fecha+ "</td> </tr>" 
+        "<td>"+tablafotos.estatusInfo+"</td>" +
+        "<td>" + tablafotos.fechaAmpliacion+ "</td> </tr>" 
 
         tablaUsuario.innerHTML +=  tr;
 
         conteo = conteo + 1;
         }else{
           let tr = " <tr class='active-row'> <td>"+conteo+"</td>" + 
-          "<td><form action='/fotosantes' method=GET id='formulario"+conteo+"'> <input type='hidden' name='idRedJalisco' value='"+tablafotos.idRedJalisco+"'><a href='javascript:enviar_formulario(formulario"+conteo+")'>"+ tablafotos.idRedJalisco +"</a></form></td>" +
+          "<td><form action='/checkEstatus' method=POST id='formulario"+conteo+"'> <input type='hidden' name='idRedJalisco' value='"+tablafotos.idRedJalisco+"'><a href='javascript:enviar_formulario(formulario"+conteo+")'>"+ tablafotos.idRedJalisco +"</a></form></td>" +
           "<td>"+tablafotos.nombreEstatus+"</td>"+
-          "<td>"+tablafotos.nombreEstatus+"</td>" +
-          "<td>" + tablafotos.fecha + "</td> </tr>" 
+          "<td>"+tablafotos.estatusInfo+"</td>" +
+          "<td>" + tablafotos.fechaAmpliacion + "</td> </tr>" 
   
           tablaUsuario.innerHTML +=  tr;
   

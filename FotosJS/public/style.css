@@ -68,3 +68,53 @@
       color: #f3f3f3 ;
       background-color: #404141;
     }
+
+
+    .contenedor {
+     
+      
+      transform: translate(-50%, -50%);
+      display:flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .centers {
+      width: 100px;
+      height: 60px;
+      position: absolute;
+    }
+    .btnq {
+      width: 97px;
+      height: 30px;
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid #000000;
+      outline: none;
+      transition: 1s ease-in-out;
+    }
+    
+    svg {
+      position:absolute;
+      left: 0;
+      top: 0;
+      fill: none;
+      stroke: rgb(255, 255, 255);
+      stroke-dasharray: 150 480;
+      stroke-dashoffset: 150;
+      transition: 1s ease-in-out;
+    }
+    
+    .btnq:hover {
+      transition: 1s ease-in-out;
+      background: #372dc5;
+    }
+    
+    .btnq:hover svg {
+      stroke-dashoffset: -480;
+    }
+    
+    .btnq span {
+      color: white;
+      font-size: 18px;
+      font-weight: 100;
+    }

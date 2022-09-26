@@ -6,6 +6,7 @@ let bool5=false
 let bool6=false
 let bool7=false
 let bool8=false
+let bool9=false
 $('#btnGuardar').hide()
 
 function idRed() {
@@ -29,12 +30,13 @@ function idRed() {
 
 
 $("#image1").change(function(){
+    
    var x = document.getElementById('image1')
    if('files' in x ){
   
-    if(x.files.length == 2){
+    if(x.files.length == 9){
       
-        $('#check1').show()
+        $('#check1').show() 
         bool1=true
     }else{
         $('#check1').hide()
@@ -60,7 +62,7 @@ $("#image2").change(function(){
     var x = document.getElementById('image3')
     if('files' in x ){
      
-     if(x.files.length == 4){
+     if(x.files.length == 2){
          
          $('#check3').show()
          bool3=true
@@ -74,7 +76,7 @@ $("#image2").change(function(){
     var x = document.getElementById('image4')
     if('files' in x ){
     
-     if(x.files.length == 2){
+     if(x.files.length == 4){
         
          $('#check4').show()
          bool4=true
@@ -102,7 +104,7 @@ $("#image2").change(function(){
     var x = document.getElementById('image6')
     if('files' in x ){
     
-     if(x.files.length == 3){
+     if(x.files.length == 2){
         
          $('#check6').show()
          bool6=true
@@ -116,7 +118,7 @@ $("#image2").change(function(){
     var x = document.getElementById('image7')
     if('files' in x ){
      
-     if(x.files.length == 3){
+     if(x.files.length == 1){
          
          $('#check7').show()
          bool7=true
@@ -130,7 +132,7 @@ $("#image2").change(function(){
     var x = document.getElementById('image8')
     if('files' in x ){
      
-     if(x.files.length == 3){
+     if(x.files.length == 2){
          
          $('#check8').show()
          bool8=true
@@ -140,9 +142,23 @@ $("#image2").change(function(){
      }
     }  
  });
+ $("#image9").change(function(){
+    var x = document.getElementById('image9')
+    if('files' in x ){
+     
+     if(x.files.length == 3){
+         
+         $('#check9').show()
+         bool9=true
+     }else{
+         $('#check9').hide()
+         bool9=false
+     }
+    }  
+ });
 
 function validar(){
-    if(bool1==true && bool2==true && bool3==true && bool4==true && bool5==true && bool5==true && bool6==true && bool7==true && bool8==true){
+    if(bool1==true && bool2==true && bool3==true && bool4==true && bool5==true && bool5==true && bool6==true && bool7==true && bool8==true && bool9==true){
         console.log('Todo correcto')
         $('#btnGuardar').click()
     }else{

@@ -7,6 +7,7 @@
     <title>Inicio</title>
     <link rel="icon" href="Images/IconoApp.ico">
     <link rel="stylesheet" href="style.css">
+    
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -15,8 +16,10 @@
 </head>
 <body>
     <!-- MENU  -->
-    <nav class="grey darken-4 nav-extended row ">
-        <div class="nav-wrapper container col s12">
+    <nav class="grey darken-4 nav-extended row " >
+        
+       
+        <div class="nav-wrapper container col s12" >
             
           <a href="/inicio" class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
             
@@ -33,6 +36,23 @@
                 
                 
         </div>
+        <div class="contenedor col s2 right">
+            
+            <div class="centers" >
+                <form action="/exit" method="POST">
+                <button class="btnq" type="submit">
+                    <svg width="100px" height="60px" viewBox="0 0 180 60" class="border">
+                      <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+                      <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+                      <span>SALIR</span>
+                    </svg>
+                   
+                </button>
+                 </form>
+            </div>     
+        
+       </div>
+       <br>
         <div class="nav-content col s12">
             <ul class="tabs tabs-transparent col s12">
               <li class="tab col s4"><a href="/fotos">Fotos</a></li>
