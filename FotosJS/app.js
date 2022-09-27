@@ -5,7 +5,10 @@ const bodyParser = require('body-parser')
 const http = require("http")
 const multer = require('multer')
 const puerto = 3002
-const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW} = require ('./controllers/database')
+
+
+const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW,cerrarEvento,datosfotosAdminRevisar,borrarfotoAdminRevisar,getDatos_sitiosSupervisor,enviarProtocoloAnalisis} = require ('./controllers/database')
+
 
 const { Console } = require('console')
 const { response } = require('express')
@@ -22,6 +25,8 @@ var usuariologin
 var empresa
 var tipo
 
+var datosSupervisor;
+let idSARIestatus_idGlobal;
 
 const upload = multer({storage:multer.memoryStorage()})
 var uploadAP2 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 },{ name: 'aimagen3', maxCount:2 },{ name: 'aimagen4', maxCount:3 }])
@@ -232,7 +237,7 @@ function server(){
            }else if(val.tipo=='normal'){
             response.redirect('/fotos')
            }else if (val.tipo=='analisis'){
-            response.redirect('/inicio')  
+            response.redirect('/analisis')  
            }else{
             response.redirect('/error')
            }
@@ -282,6 +287,86 @@ function server(){
         }
       })
 
+      
+      app.get('/fotosAdminRevisar', (req, res) => {
+        res.sendFile(path.resolve(__dirname,'public/fotosAdminRevisar.html'));
+      })
+
+      
+      app.post('/datosfotosAdminRevisarVista',(req,res)=>{
+        try {
+          const{idSARIestatus} = req.body;
+          //console.log(`idsariFotos ${idSARIestatus}`)
+          idSARIestatus_idGlobal = idSARIestatus
+          datosfotosAdminRevisar(idSARIestatus_idGlobal)
+          .then((inf)=>{
+            datosSupervisor=inf
+            res.redirect('/fotosAdminRevisar')
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      });
+
+      app.post('/enviarProtocoloAnalisis',(req,res)=>{
+        try {
+          const{idSARIestatus} = req.body;
+          enviarProtocoloAnalisis(idSARIestatus)
+          .then((inf)=>{
+            res.redirect('/supervisor')
+          })
+
+        } catch (error) {
+          
+        }
+      })
+
+
+      app.post('/borrarFotoAdmin',(req,res)=>{
+        try {
+          const{idImagenEliAdmin} = req.body;
+
+          borrarfotoAdminRevisar(idImagenEliAdmin)
+          .then((infEliFoto)=>{
+              datosfotosAdminRevisar(idSARIestatus_idGlobal)
+              .then((inf)=>{
+                datosSupervisor=inf
+                res.redirect('/fotosAdminRevisar')
+            })
+          })
+
+        } catch (error) {
+          console.log(error)
+        }
+      });
+
+      
+      app.get('/informacionDatosSitioSupervisor',(req,res)=>{
+        res.json(datosSupervisor)
+      });
+
+      
+      app.get('/getDatos_sitiosSupervisor',(req,res)=>{
+        try {
+          getDatos_sitiosSupervisor()
+          .then((inf)=>{
+            res.json(inf)
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      });
+
+      app.get('/getDatos_sitiosAnalisis',(req,res)=>{
+        try {
+          getDatos_sitiosAnalisis()
+          .then((inf)=>{
+            res.json(inf)
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      });
 
       app.post('/photoDB',upload.single('ProductImage'),(req,res)=>{
         image1 = req.file.buffer.toString('base64')      
