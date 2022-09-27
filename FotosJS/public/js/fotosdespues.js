@@ -9,6 +9,9 @@ let bool8=false
 let bool9=false
 let bool10=false
 $('#btnGuardar').hide()
+$('#btnGuardar2').hide()
+$('#AP').hide()
+
 
 function idRed() {
     try{
@@ -18,16 +21,168 @@ function idRed() {
       //console.log(usuarios)
       
       let idRedJalisco = document.getElementById('idRedJalisco');
-      let idsitio = document.getElementById('idsitio');    
+      let idsitio = document.getElementById('idsitio'); 
+      let idRedJaliscoAP = document.getElementById('idRedJaliscoAP');
+      let idsitioAP = document.getElementById('idsitioAP');    
       //console.log(idAlarma_inf);     
-        $(idRedJalisco).text(idRed.idRedJalisco) 
-        $(idsitio).val(idRed.idRedJalisco) 
+        $(idRedJalisco).text(idRed.idRedJalisco_id) 
+        $(idsitio).val(idRed.idRedJalisco_id) 
+        $(idRedJaliscoAP).text(idRed.idRedJalisco_id) 
+        $(idsitioAP).val(idRed.idRedJalisco_id) 
     })
   }catch(e){
     console.log(e)
   }
   }
 
+  function numEquipo() {
+    try{
+    fetch('http://localhost:3002/numEquipos')
+    .then((response) => response.json())
+    .then((numEquipo)=>{
+        let xAp = document.querySelector('#divfoto1')
+        let Ap = document.getElementById('AP')
+      //console.log(usuarios)
+      let obj
+      for ( obj of numEquipo){
+        
+      }
+      if(obj!=1){
+        Ap.value = obj.AP
+        let a=1
+        for(i=2;i<=obj.AP;i++){
+            
+            let lbl = 
+            "<div class='col s12'><div class='col s4 offset-s1 input-field'>"+
+                    
+          "<p class='white-text'>Pantallas de Configuración Access Point"+i+"</p>"+
+           " <input hidden value='Pantallas de Configuración Access Point' name='ainput"+a+"' type='text' >"+
+            
+        "</div>"+
+    
+    
+        "<div class='col s3'>"+
+       "<p class='white-text'>(1 Imagen)</p>"+
+        "</div>"+
+        "<div class='col s4'>"+                
+            "<div class='col s12'>"+  
+                
+                    "<div class='file-field input-field'>"+
+                        "<div class='file-path-wrapper'>"+
+                            "<div class='btn black-text white'>"+
+                                "<span>Imagen</span>"+
+                                "<input name='aimagen"+a+"' id='aimage"+a+"' class='file-path validate' type='file' accept='image/*' multiple>"+
+                            "</div>"+
+                            "<img hidden src='./Images/check2.png' id='acheck"+a+"' alt='' width='35px' height='35px' style='padding-left:5px ;'> "+                                 
+                    "</div>"+                          
+                    "</div>"+
+               
+            "</div>"+                
+            "</div></div>"
+            a++
+        let seg= 
+            "<div class='col s12'><div class=' col s4 offset-s1 input-field'>"+
+            "<p class='white-text'>Pruebas de Tráfico (Speed Test)"+i+"</p>"+
+            "<input hidden value='Pruebas de Tráfico (Speed Test)' id='' name='ainput"+a+"' type='text' >"+
+        "</div>"+
+        "<div class='col s3'>"+
+            "<p class='white-text'>(1 Imagen)</p>"+
+            "</div>"+
+            "<div class='col s4'>"+                
+                "<div class='col s12'>"+  
+                    
+                        "<div class='file-field input-field'>"+
+                            "<div class='file-path-wrapper'>"+
+                                "<div class='btn black-text white'>"+
+                                    "<span>Imagen</span>"+
+                                    "<input name='aimagen"+a+"' id='aimage"+a+"' class='file-path validate' type='file' accept='image/*' multiple>"+
+                                "</div>"+     
+                                "<img hidden src='./Images/check2.png' id='acheck"+a+"' alt='' width='35px' height='35px' style='padding-left:5px ;'>"+                             
+                        "</div>"+                          
+                        "</div>"+
+                   
+                "</div>"+                
+            "</div></div>"
+            a++
+            xAp.innerHTML += lbl+ seg
+            
+        }
+      }
+      
+
+    })
+
+    
+    
+  }catch(e){
+    console.log(e)
+  }
+  }
+
+numEquipo()
+setTimeout(()=>{
+    try {
+        $("#aimage1").change(function(){
+            var x = document.getElementById('aimage1')
+            if('files' in x ){
+           
+             if(x.files.length == 1){
+               
+                 $('#acheck1').show()
+                 bool1=true
+             }else{
+                 $('#acheck1').hide()
+                 bool1=false
+             }
+            }  
+         });
+         $("#aimage2").change(function(){
+            var x = document.getElementById('aimage2')
+            if('files' in x ){
+           
+             if(x.files.length == 1){
+               
+                 $('#acheck2').show()
+                 bool1=true
+             }else{
+                 $('#acheck2').hide()
+                 bool1=false
+             }
+            }  
+         });
+         $("#aimage3").change(function(){
+            var x = document.getElementById('aimage3')
+            if('files' in x ){
+           
+             if(x.files.length == 1){
+               
+                 $('#acheck3').show()
+                 
+             }else{
+                 $('#acheck3').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage4").change(function(){
+            var x = document.getElementById('aimage4')
+            if('files' in x ){
+           
+             if(x.files.length == 1){
+               
+                 $('#acheck4').show()
+                 
+             }else{
+                 $('#acheck4').hide()
+                
+             }
+            }  
+         });
+         
+    } catch (error) {
+        console.log(error)
+    }
+},1000)
 
 
 $("#image1").change(function(){
@@ -177,6 +332,9 @@ function validar(){
     if(bool1==true && bool2==true && bool3==true && bool4==true && bool5==true && bool5==true && bool6==true && bool7==true && bool8==true && bool9==true && bool10==true ){
         console.log('Todo correcto')
         $('#btnGuardar').click()
+        setTimeout(()=>{
+            $('#btnGuardar2').click()
+        },200)
     }else{
         console.log('Algo falta')
         

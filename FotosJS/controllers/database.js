@@ -171,7 +171,6 @@ const document = this;
             resultado = false
             resolve(resultado)
         }
-     
             
         })     
         
@@ -208,7 +207,7 @@ const document = this;
     
     try{
         const pool = await getConnection();
-    
+        console.log(nombre,apellidos,username,password,correo,empresa,tipo)
         await pool.request()
         .input("nombre", sql.Text,nombre)
         .input("apellidos", sql.Text,apellidos)
@@ -228,7 +227,7 @@ const document = this;
     }
     }
 
-    const Imageupload = async (imagen,estatus,nombre,idSitio,req, res) => {       
+    const Imageupload = async (imagen,estatus,nombre,idSitio,numEquipo,req, res) => {       
         
         try{
             const pool = await getConnection();
@@ -238,6 +237,7 @@ const document = this;
             .input("estatus", sql.VarChar,estatus)
             .input("nombre", sql.VarChar,nombre)
             .input("idSitio", sql.Int,idSitio)
+            .input("numEquipo", sql.Int,numEquipo)
             .query(queries.UploadImage)
             console.log('Imageupload')
             
@@ -464,6 +464,34 @@ const document = this;
             }
         
         };
+        const getAPSW = async (idRedJalisco,req,res)=>{
+            
+            try {
+                
+                const pool = await getConnection()
+                const result = await pool.request()
+                
+                .input("idRedJalisco",sql.VarChar,idRedJalisco)
+                .query(queries.getAPSW)
+                //console.log(result)
+                //res.json(result.recordset)
+        
+                return new Promise((resolve,reject)=>{
+                    resolve(result['recordset']);
+                })
+        
+                //return res.request(result);
+        
+                //return res.send(result.recordset);
+        
+        
+                //res.send('index',{result});
+                //res.json(result.recordset)
+            } catch (error) {
+                console.log(`Error en la extraccion de informacion de INICIO: ${error}`)
+            }
+        
+        };
         
     
     exports.getProducts = getProducts
@@ -486,3 +514,4 @@ const document = this;
     exports.SelectidEstatus = SelectidEstatus
     exports.Infousuario = Infousuario
     exports.CheckEstatus = CheckEstatus
+    exports.getAPSW = getAPSW

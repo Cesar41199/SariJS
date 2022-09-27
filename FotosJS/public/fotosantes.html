@@ -47,9 +47,7 @@
           </div>
     </nav>
     <!--PRUEBA IMAGENES-->
-    <div>
-
-    </div>
+   
     <div class="container grey darken-3 ">
         
             <div class="row">
@@ -148,6 +146,7 @@
             
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
+            
             <div class=" col s4 offset-s1 input-field">
                 <input disabled value="Vistas Gral. de Área de AP"  id="" type="text" class="validate white-text">
                 <input hidden value="Vistas Gral. de Área de AP" name="input4"  type="text" >
@@ -171,7 +170,7 @@
                        
                     </div>                
                 </div>
-            
+          
             <!--dIV IMAGENES-->
             <!--dIV IMAGENES-->
             <div class=" col s4 offset-s1 input-field">
@@ -277,11 +276,22 @@
                 </div>
             
             <!--dIV IMAGENES-->
+            
             <input type="hidden" value="" name="idsitio" id="idsitio">
             <input type="hidden" value="Antes" name="estatus" id="estatus">
-        </form>
+            
+            </form>
             
             </div>
+        <form action="/ApAntes"  id="formAP" method="POST" enctype="multipart/form-data">
+            <input type="hidden" value="" name="AP" id="AP">
+            <input type="hidden" value="" name="idsitioAP" id="idsitioAP">
+            <input type="hidden" value="Antes" name="estatusAP" id="estatusAP">
+        
+            <div id="divfoto1" class="row">
+                
+            </div>
+        </form>
             <div class="row">
                 <div class="col s2 offset-s10"> 
  
@@ -291,6 +301,9 @@
                         </button> 
                        
                         <button id="btnGuardar" class="btn waves-effect waves-light" form="formimage" type="submit" >Guardar
+                            <i class="material-icons right">send</i>
+                        </button>  
+                        <button id="btnGuardar2" class="btn waves-effect waves-light" form="formAP" type="submit" >Guardar
                             <i class="material-icons right">send</i>
                         </button>  
                                               

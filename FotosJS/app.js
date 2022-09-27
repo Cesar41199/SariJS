@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const http = require("http")
 const multer = require('multer')
 const puerto = 3002
-const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus} = require ('./controllers/database')
+const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW} = require ('./controllers/database')
 
 const { Console } = require('console')
 const { response } = require('express')
@@ -14,6 +14,7 @@ const { Resolver } = require('dns')
 var jso
 var idRed 
 var Usuario
+var APSW
 
 var events
 var log = false
@@ -23,6 +24,8 @@ var tipo
 
 
 const upload = multer({storage:multer.memoryStorage()})
+var uploadAP2 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 },{ name: 'aimagen3', maxCount:2 },{ name: 'aimagen4', maxCount:3 }])
+var uploadAP3 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 }])
 var uploadMultiple = upload.fields([{ name: 'imagen1', maxCount:2}, { name: 'imagen2', maxCount:2 },{ name: 'imagen3', maxCount:4 },{ name: 'imagen4', maxCount:2 },{ name: 'imagen5', maxCount:2 },{ name: 'imagen6', maxCount:3 },{ name: 'imagen7', maxCount:3 },{ name: 'imagen8', maxCount:3 }])
 var uploadMultipleDurante = upload.fields([{ name: 'imagen1', maxCount:9}, { name: 'imagen2', maxCount:2 },{ name: 'imagen3', maxCount:2 },{ name: 'imagen4', maxCount:4 },{ name: 'imagen5', maxCount:2 },{ name: 'imagen6', maxCount:2 },{ name: 'imagen7', maxCount:1 },{ name: 'imagen8', maxCount:2 },{ name: 'imagen9', maxCount:3 }])
 var uploadMultipleDespues = upload.fields([{ name: 'imagen1', maxCount:6}, { name: 'imagen2', maxCount:1 },{ name: 'imagen3', maxCount:5 },{ name: 'imagen4', maxCount:3 },{ name: 'imagen5', maxCount:4 },{ name: 'imagen6', maxCount:5 },{ name: 'imagen7', maxCount:2 },{ name: 'imagen8', maxCount:2 },{ name: 'imagen9', maxCount:1 },,{ name: 'imagen10', maxCount:1 }])
@@ -70,12 +73,25 @@ function server(){
       app.get('/fotosantes', (req, res) => {
         if(log==true){
         idRed=req.query
+       const {idRedJalisco_id} = req.query
         
+        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+          
+          APSW= numEquipo          
+       })
         res.sendFile(path.resolve(__dirname,'public/fotosantes.html'))
       }else{
         res.redirect('/')
       }
       })
+      app.get('/numEquipos', (req, res) => {
+        if(log==true){
+        res.json(APSW)
+      }else{
+        res.redirect('/')
+      }
+      })
+
       app.get('/idRed', (req, res) => {
         if(log==true){
         res.json(idRed)
@@ -90,6 +106,12 @@ function server(){
       app.get('/fotosdurante', (req, res) => {
         if(log==true){
         idRed=req.query
+        const {idRedJalisco_id} = req.query
+        
+        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+          
+          APSW= numEquipo          
+       })
         res.sendFile(path.resolve(__dirname,'public/fotosdurante.html'));
       }else{
         res.redirect('/')
@@ -98,6 +120,12 @@ function server(){
       app.get('/fotosdespues', (req, res) => {
         if(log==true){
         idRed=req.query
+        const {idRedJalisco_id} = req.query
+        
+        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+          
+          APSW= numEquipo          
+       })
         res.sendFile(path.resolve(__dirname,'public/fotosdespues.html'));
       }else{
         res.redirect('/')
@@ -142,7 +170,7 @@ function server(){
       }
       })
       app.post('/checkEstatus', (req, res) => {
-        if(log==true && tipo=='admin'){
+        if(log==true){
         
         const{idRedJalisco} = req.body
 
@@ -150,13 +178,13 @@ function server(){
         CheckEstatus(idRedJalisco).then((estatus)=>{
           var string = encodeURIComponent(idRedJalisco);
           if(estatus=='Ninguno'){
-            res.redirect('/fotosantes?idRedJalisco='+string)
+            res.redirect('/fotosantes?idRedJalisco_id='+string)
           }else if(estatus=='Antes'){
-            res.redirect('/fotosdurante?idRedJalisco='+string)
+            res.redirect('/fotosdurante?idRedJalisco_id='+string)
           }else if(estatus=='Durante'){
-            res.redirect('/fotosdespues?idRedJalisco='+string)
+            res.redirect('/fotosdespues?idRedJalisco_id='+string)
           }else if(estatus=='Despues'){
-            res.redirect('/fotosaprovada?idRedJalisco='+string)
+            res.redirect('/fotosaprovada?idRedJalisco_id='+string)
           }else{
             response.redirect('/error')
           }
@@ -265,11 +293,381 @@ function server(){
         })
   
       })
-
+      
+        app.post('/ApAntes',upload.any(),(req,res,next)=>{
+          
+          const{AP}=req.body
+          console.log(AP)
+          
+          if(AP == 2){
+            console.log(req.files)
+            
+              if(req.files){
+                let imagenes=[]
+                let input=[]
+                let numEquipo=[]
+                const{idsitioAP,estatusAP,ainput1,ainput2}= req.body
+                imagenes[0]=req.files[0].buffer.toString('base64')
+                imagenes[1]=req.files[1].buffer.toString('base64')
+                imagenes[2]=req.files[2].buffer.toString('base64')
+                imagenes[3]=req.files[3].buffer.toString('base64')
+                imagenes[4]=req.files[4].buffer.toString('base64')
+                
+                
+                
+                input[0] = ainput1
+                input[1] = ainput1
+                input[2] = ainput2
+                input[3] = ainput2
+                input[4] = ainput2
+                numEquipo[0]= 2
+                numEquipo[1]= 2
+                numEquipo[2]= 2
+                numEquipo[3]= 2
+                numEquipo[4]= 2
+               
+                
+    
+                info ='Borrador'
+    
+                
+                var string = encodeURIComponent(idsitioAP);
+                  modificarEvento(idsitioAP,info,estatusAP)
+                  .then((inf2)=>{                 
+                      //console.log(`info::: ${inf}`)
+                      
+                        SelectidEstatus(idsitioAP)
+                        .then((query)=>{
+                          
+                          for(i=0;i<=4;i++){
+                           
+                          console.log(imagenes[i].length ,estatusAP,input[i],query,numEquipo[i])   
+                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
+                          .then(()=>{
+                            
+                          })
+                        }
+                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
+                        })
+                  })
+                   
+            }
+          }else if(AP == 3){
+            
+              if(req.files){
+                let imagenes=[]
+                let input=[]
+                let numEquipo=[]
+                const{idsitioAP,estatusAP,ainput1,ainput2,ainput3,ainput4}= req.body
+                imagenes[0]=req.files[0].buffer.toString('base64')
+                imagenes[1]=req.files[1].buffer.toString('base64')
+                imagenes[2]=req.files[2].buffer.toString('base64')
+                imagenes[3]=req.files[3].buffer.toString('base64')
+                imagenes[4]=req.files[4].buffer.toString('base64')
+                imagenes[5]=req.files[5].buffer.toString('base64')
+                imagenes[6]=req.files[6].buffer.toString('base64')
+                imagenes[7]=req.files[7].buffer.toString('base64')
+                imagenes[8]=req.files[8].buffer.toString('base64')
+                imagenes[9]=req.files[9].buffer.toString('base64')
+                
+                
+                input[0] = ainput1
+                input[1] = ainput1
+                input[2] = ainput2
+                input[3] = ainput2
+                input[4] = ainput2
+                input[5] = ainput3
+                input[6] = ainput3
+                input[7] = ainput4
+                input[8] = ainput4
+                input[9] = ainput4
+                
+                numEquipo[0]= 2
+                numEquipo[1]= 2
+                numEquipo[2]= 2
+                numEquipo[3]= 2
+                numEquipo[4]= 2
+                numEquipo[5]= 3
+                numEquipo[6]= 3
+                numEquipo[7]= 3
+                numEquipo[8]= 3
+                numEquipo[8]= 3
+                numEquipo[9]= 3
+                
+                info ='Borrador'
+    
+                
+                var string = encodeURIComponent(idsitioAP);
+                  modificarEvento(idsitioAP,info,estatusAP)
+                  .then((inf2)=>{                 
+                      //console.log(`info::: ${inf}`)
+                      
+                        SelectidEstatus(idsitioAP)
+                        .then((query)=>{
+                          
+                          for(i=0;i<=9;i++){
+                           
+                          
+                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
+                          .then(()=>{
+                            
+                          })
+                        }
+                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
+                        })
+                  })
+                }   
+            
+          }else{
+            console.log('no entra')
+          }
+                 
+  
+         
+        })
+        app.post('/ApDurante',upload.any(),(req,res,next)=>{
+          
+          const{AP}=req.body
+          console.log(AP)
+          
+          if(AP == 2){
+            console.log(req.files)
+            
+              if(req.files){
+                let imagenes=[]
+                let input=[]
+                let numEquipo=[]
+                const{idsitioAP,estatusAP,ainput1,ainput2}= req.body
+                imagenes[0]=req.files[0].buffer.toString('base64')
+                imagenes[1]=req.files[1].buffer.toString('base64')
+                imagenes[2]=req.files[2].buffer.toString('base64')
+                imagenes[3]=req.files[3].buffer.toString('base64')
+                
+                
+                
+                
+                input[0] = ainput1
+                input[1] = ainput1
+                input[2] = ainput2
+                input[3] = ainput2
+                
+                numEquipo[0]= 2
+                numEquipo[1]= 2
+                numEquipo[2]= 2
+                numEquipo[3]= 2
+                
+               
+                
+    
+                info ='Borrador'
+    
+                
+                var string = encodeURIComponent(idsitioAP);
+                  modificarEvento(idsitioAP,info,estatusAP)
+                  .then((inf2)=>{                 
+                      //console.log(`info::: ${inf}`)
+                      
+                        SelectidEstatus(idsitioAP)
+                        .then((query)=>{
+                          
+                          for(i=0;i<=3;i++){
+                           
+                          // console.log(imagenes[i].length ,estatusAP,input[i],query,numEquipo[i])   
+                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
+                          .then(()=>{
+                            
+                          })
+                        }
+                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
+                        })
+                  })
+                   
+            }
+          }else if(AP == 3){
+            
+              if(req.files){
+                let imagenes=[]
+                let input=[]
+                let numEquipo=[]
+                const{idsitioAP,estatusAP,ainput1,ainput2,ainput3,ainput4}= req.body
+                imagenes[0]=req.files[0].buffer.toString('base64')
+                imagenes[1]=req.files[1].buffer.toString('base64')
+                imagenes[2]=req.files[2].buffer.toString('base64')
+                imagenes[3]=req.files[3].buffer.toString('base64')
+                imagenes[4]=req.files[4].buffer.toString('base64')
+                imagenes[5]=req.files[5].buffer.toString('base64')
+                imagenes[6]=req.files[6].buffer.toString('base64')
+                imagenes[7]=req.files[7].buffer.toString('base64')
+               
+                
+                
+                
+                input[0] = ainput1
+                input[1] = ainput1
+                input[2] = ainput2
+                input[3] = ainput2
+                input[4] = ainput3
+                input[5] = ainput3
+                input[6] = ainput4
+                input[7] = ainput4
+               
+                numEquipo[0]= 2
+                numEquipo[1]= 2
+                numEquipo[2]= 2
+                numEquipo[3]= 2
+                numEquipo[4]= 3
+                numEquipo[5]= 3
+                numEquipo[6]= 3
+                numEquipo[7]= 3
+              
+                
+                info ='Borrador'
+    
+                
+                var string = encodeURIComponent(idsitioAP);
+                  modificarEvento(idsitioAP,info,estatusAP)
+                  .then((inf2)=>{                 
+                      //console.log(`info::: ${inf}`)
+                      
+                        SelectidEstatus(idsitioAP)
+                        .then((query)=>{
+                          
+                          for(i=0;i<=7;i++){
+                           
+                          
+                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
+                          .then(()=>{
+                            
+                          })
+                        }
+                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
+                        })
+                  })
+                }   
+            
+          }else{
+            console.log('no entra')
+          }
+                 
+  
+         
+        })
+        app.post('/ApDespues',upload.any(),(req,res,next)=>{
+          
+          const{AP}=req.body
+          console.log(AP)
+          
+          if(AP == 2){
+            console.log(req.files)
+            
+              if(req.files){
+                let imagenes=[]
+                let input=[]
+                let numEquipo=[]
+                const{idsitioAP,estatusAP,ainput1,ainput2}= req.body
+                imagenes[0]=req.files[0].buffer.toString('base64')
+                imagenes[1]=req.files[1].buffer.toString('base64')
+                
+                
+                
+                
+                input[0] = ainput1
+                input[1] = ainput2
+                
+                numEquipo[0]= 2
+                numEquipo[1]= 2
+                
+                
+    
+                info ='Borrador'
+    
+                
+                var string = encodeURIComponent(idsitioAP);
+                  modificarEvento(idsitioAP,info,estatusAP)
+                  .then((inf2)=>{                 
+                      //console.log(`info::: ${inf}`)
+                      
+                        SelectidEstatus(idsitioAP)
+                        .then((query)=>{
+                          
+                          for(i=0;i<=1;i++){
+                           
+                          // console.log(imagenes[i].length ,estatusAP,input[i],query,numEquipo[i])   
+                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
+                          .then(()=>{
+                            
+                          })
+                        }
+                        res.redirect('/fotosdespues?idRedJalisco_id='+string)
+                        })
+                  })
+                   
+            }
+          }else if(AP == 3){
+            
+              if(req.files){
+                let imagenes=[]
+                let input=[]
+                let numEquipo=[]
+                const{idsitioAP,estatusAP,ainput1,ainput2,ainput3,ainput4}= req.body
+                imagenes[0]=req.files[0].buffer.toString('base64')
+                imagenes[1]=req.files[1].buffer.toString('base64')
+                imagenes[2]=req.files[2].buffer.toString('base64')
+                imagenes[3]=req.files[3].buffer.toString('base64')
+               
+                
+                
+                input[0] = ainput1
+                input[1] = ainput2
+                input[2] = ainput3
+                input[3] = ainput4
+                
+                
+                numEquipo[0]= 2
+                numEquipo[1]= 2
+                numEquipo[2]= 3
+                numEquipo[3]= 3
+               
+                
+                info ='Borrador'
+    
+                
+                var string = encodeURIComponent(idsitioAP);
+                  modificarEvento(idsitioAP,info,estatusAP)
+                  .then((inf2)=>{                 
+                      //console.log(`info::: ${inf}`)
+                      
+                        SelectidEstatus(idsitioAP)
+                        .then((query)=>{
+                          
+                          for(i=0;i<=3;i++){
+                           
+                          
+                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
+                          .then(()=>{
+                            
+                          })
+                        }
+                        res.redirect('/fotosaprovada?idRedJalisco_id='+string)
+                        })
+                  })
+                }   
+            
+          }else{
+            console.log('no entra')
+          }
+                 
+  
+         
+        })
+      
+      
      
       app.post('/modificarEventoAntes' ,uploadMultiple,(req,res,next)=>{
+        console.log('Antes')
         try {
           if(req.files){
+            
             let imagenes=[]
             let input=[]
             const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8}= req.body
@@ -330,13 +728,13 @@ function server(){
                       
                       for(i=0;i<=20;i++){
                        
-                        
-                      Imageupload(imagenes[i],estatus,input[i],query)
+                     
+                      Imageupload(imagenes[i],estatus,input[i],query,1)
                       .then(()=>{
                         
                       })
                     }
-                    res.redirect('/fotosdurante?idRedJalisco='+string)
+                    res.redirect('/fotosdurante?idRedJalisco_id='+string)
                     })
               })
             }        
@@ -424,12 +822,12 @@ function server(){
                       for(i=0;i<=26;i++){
                        
                         
-                      Imageupload(imagenes[i],estatus,input[i],query)
+                      Imageupload(imagenes[i],estatus,input[i],query,1)
                       .then(()=>{
                         
                       })
                     }
-                    res.redirect('/fotosdespues?idRedJalisco='+string)
+                    res.redirect('/fotosdespues?idRedJalisco_id='+string)
                     })
               })
         }
@@ -523,12 +921,12 @@ function server(){
                       for(i=0;i<=29;i++){
                        
                         
-                      Imageupload(imagenes[i],estatus,input[i],query)
+                      Imageupload(imagenes[i],estatus,input[i],query,1)
                       .then(()=>{
                         
                       })
                     }
-                    res.redirect('/fotosaprovada?idRedJalisco='+string)
+                    res.redirect('/fotosaprovada?idRedJalisco_id='+string)
                     })
               })
         }
