@@ -3,6 +3,7 @@ const {queries} = require ('./database/query')
 
 const bcrypct = require("bcryptjs");
 const { json } = require('body-parser');
+const { async } = require('regenerator-runtime');
 const rondas = 3;
 const document = this;
 
@@ -464,10 +465,12 @@ const document = this;
             }
         }
        
-        const datosfotosAdminRevisar = async(req,res)=>{
+        const datosfotosAdminRevisar = async(idSARIestatus,req,res)=>{
             try {
                 const pool = await getConnection()
-                const result = await pool.request().query(queries.datosfotosAdminRevisar)
+                const result = await pool.request()
+                .input("idSARIestatus",sql.Int,idSARIestatus)
+                .query(queries.datosfotosAdminRevisar)
 
                 return new Promise((resolver,reject)=>{
                     resolver(result['recordset'])
@@ -475,6 +478,21 @@ const document = this;
 
             } catch (error) {
                 console.log(`Error en la extraccion de mas datosfotosAdminRevisar: ${error}`)
+            }
+        };
+
+        const enviarProtocoloAnalisis = async(idSARIestatus,req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request()
+                .input("idSARIestatus",sql.Int,idSARIestatus)
+                .query(queries.enviarProtocoloAnalisis)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+            } catch (error) {
+                console.log(`Error en la extraccion de mas enviarProtocoloAnalisis: ${error}`)
             }
         };
 
@@ -491,7 +509,37 @@ const document = this;
                 })
 
             } catch (error) {
-                console.log(`Error en la extraccion de mas datosfotosAdminRevisar: ${error}`)
+                console.log(`Error en la extraccion de mas borrarfotoAdminRevisar: ${error}`)
+            }
+        };
+
+        
+        const getDatos_sitiosSupervisor = async(req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request().query(queries.getDatos_sitiosSupervisor)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+
+            } catch (error) {
+                console.log(`Error en la extraccion de mas getDatos_sitiosSupervisor: ${error}`)
+            }
+        };
+
+        
+        const getDatos_sitiosAnalisis = async(req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request().query(queries.getDatos_sitiosAnalisis)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+
+            } catch (error) {
+                console.log(`Error en la extraccion de mas getDatos_sitiosAnalisis: ${error}`)
             }
         };
         
@@ -516,5 +564,9 @@ const document = this;
     exports.SelectidEstatus = SelectidEstatus
     exports.Infousuario = Infousuario
     exports.CheckEstatus = CheckEstatus
+
     exports.datosfotosAdminRevisar = datosfotosAdminRevisar
     exports.borrarfotoAdminRevisar = borrarfotoAdminRevisar
+    exports.getDatos_sitiosSupervisor = getDatos_sitiosSupervisor
+    exports.enviarProtocoloAnalisis = enviarProtocoloAnalisis
+    exports.getDatos_sitiosAnalisis = getDatos_sitiosAnalisis
