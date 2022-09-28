@@ -8,15 +8,17 @@ function llenartabla() {
       //console.log(usuarios)
       let conteo= 1
       let tablaUsuario = document.querySelector('#tabla-inicio tbody');
-      
+      let fecha;
       //console.log(idAlarma_inf);
       for (const tabla of tablaDatosSupervisor) {
-        
+        fecha= new Date(tabla.Fecha);
           let tr = " <tr class='other-row'> <td>"+conteo+"</td>" + 
           "<td><form action='/datosfotosAdminRevisarVista' method=POST> <input type='hidden' name='idSARIestatus' value='"+tabla.idSARIestatus+"'> <button type='submit' class='estiloLetras'>"+ tabla.idRedJalisco +"</button></form></td>"+
           "<td>"+tabla.estatusInfo+"</td>"+
           "<td>"+tabla.estatusSave+"</td>"+
           "<td>"+tabla.nombre+"</td>"+
+          "<td>"+tabla.Fecha+"</td>"+
+          "<td>"+tabla.proveedor+"</td>"+
           "</tr>" 
 
         tablaUsuario.innerHTML +=  tr;

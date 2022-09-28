@@ -1,9 +1,42 @@
 
 const dirrecionServer='http://localhost:3002/';
 
+
+function llenartabla() {
+    try{
+    fetch(dirrecionServer+'getDatos_sitiosAnalisis')
+    .then((response) => response.json())
+    .then((tablaDatosSupervisor)=>{
+      //console.log(usuarios)
+      let conteo= 1
+      let tablaUsuario = document.querySelector('#tabla-inicio tbody');
+      let fecha;
+      //console.log(idAlarma_inf);
+      for (const tabla of tablaDatosSupervisor) {
+        fecha= new Date(tabla.Fecha);
+          let tr = " <tr class='other-row'> <td>"+conteo+"</td>" + 
+          "<td><form action='/datosfotosAnalisisRevisar' method=POST> <input type='hidden' name='idSARIestatus' value='"+tabla.idSARIestatus+"'> <button type='submit' class='estiloLetras'>"+ tabla.idRedJalisco +"</button></form></td>"+
+          "<td>"+tabla.estatusInfo+"</td>"+
+          "<td>"+tabla.estatusSave+"</td>"+
+          "<td>"+tabla.nombre+"</td>"+
+          "<td>"+tabla.Fecha+"</td>"+
+          "<td>"+tabla.proveedor+"</td>"+
+          "</tr>" 
+
+        tablaUsuario.innerHTML +=  tr;
+
+        conteo = conteo + 1;
+        
+      }
+    })
+  }catch(e){
+    console.log(e)
+  }
+  };
+
 function llenarDatosImagenes(){
     try {
-        fetch(dirrecionServer+'informacionDatosSitioSupervisor')
+        fetch(dirrecionServer + 'informacionDatosSitioAnalisis')
         .then((response)=> response.json())
         .then((tablaInf)=>{
 
@@ -45,7 +78,7 @@ function llenarDatosImagenes(){
         let primerParteImagen = '<form action="borrarFotoAdmin" method="post" style="min-width: 186px; max-width: 386px;padding: 2px;">'+
         '<img class="estiloImagenVerAdmin" src="data:image/png;base64,';
         let segundaParteImagen = '" alt=""> '+
-            'Foto <label class="letraNumeroEquipo">';
+            '# Equipo <label class="letraNumeroEquipo">';
         let parte_conteo ='</label> '+
             '<input type="hidden" name="idImagenEliAdmin" value="';
         let tercerParte ='"><button type="submit"><span class="material-icons" style="color: red;">delete</span></button>'+
@@ -62,36 +95,35 @@ function llenarDatosImagenes(){
                 if  (tablafotosAdmin.estatus == 'Antes'){
                     conteoAntes=conteoAntes+1;
                     if  (tablafotosAdmin.nombre == 'Fachada de Sitio'){
-                        /*collapserFachadaSitio.innerHTML += `<img style="min-width: 186px; max-width: 386px;padding: 2px;" src="data:image/png;base64,${tablafotosAdmin.base64}" alt="">`*/
-                        collapserFachadaSitio.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapserFachadaSitio.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     }
     
                     if  (tablafotosAdmin.nombre == 'Vista Gral. de Área de Switch'){
-                        collapser_AntesVistaGralAreaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesVistaGralAreaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     } 
     
                     if  (tablafotosAdmin.nombre == 'Vista Gral. y Acercamiento de Equipo Existente'){
-                        collapser_AntesVistaGralAcercamientoEquip.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesVistaGralAcercamientoEquip.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     }   
     
                     if  (tablafotosAdmin.nombre == 'Vistas Gral. de Área de AP'){
-                        collapser_AntesVistaGralAreaAP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesVistaGralAreaAP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     } 
     
                     if  (tablafotosAdmin.nombre == 'Switch'){
-                        collapser_AntesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     } 
     
                     if  (tablafotosAdmin.nombre == 'Access Points'){
-                        collapser_AntesAccessPoint.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesAccessPoint.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     } 
     
                     if  (tablafotosAdmin.nombre == 'Elementos Pasivos'){
-                        collapser_AntesElemPasi.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesElemPasi.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     } 
     
                     if  (tablafotosAdmin.nombre == 'Etiqueta Series Switch/AP/Pasivo'){
-                        collapser_AntesEtiquetaSeriesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        collapser_AntesEtiquetaSeriesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
                     }
 
                 } /* //////////////////////////////////// *** FIN del ANTES *** ////////////////////////////////////////////// */ 
@@ -156,39 +188,10 @@ function llenarDatosImagenes(){
         
     }
 };
+  
 
 
-function llenartabla_SitiosSupervisor() {
-    try{
-    fetch(dirrecionServer + 'getDatos_sitiosSupervisor')
-    .then((response) => response.json())
-    .then((tablaDatosSupervisor)=>{
-      //console.log(usuarios)
-      let conteo= 1
-      let tablaUsuario = document.querySelector('#tabla-inicio tbody');
-      let fecha;
-      //console.log(idAlarma_inf);
-      for (const tabla of tablaDatosSupervisor) {
-        fecha= new Date(tabla.Fecha);
-          let tr = " <tr class='other-row'> <td>"+conteo+"</td>" + 
-          "<td><form action='/datosfotosAdminRevisarVista' method=POST> <input type='hidden' name='idSARIestatus' value='"+tabla.idSARIestatus+"'> <button type='submit' class='estiloLetras'>"+ tabla.idRedJalisco +"</button></form></td>"+
-          "<td>"+tabla.estatusInfo+"</td>"+
-          "<td>"+tabla.estatusSave+"</td>"+
-          "<td>"+tabla.nombre+"</td>"+
-          "<td>"+tabla.Fecha+"</td>"+
-          "<td>"+tabla.proveedor+"</td>"+
-          "</tr>" 
+  llenartabla();
+  llenarDatosImagenes();
 
-        tablaUsuario.innerHTML +=  tr;
 
-        conteo = conteo + 1;
-        
-      }
-    })
-  }catch(e){
-    console.log(e)
-  }
-};
-
-llenarDatosImagenes();
-llenartabla_SitiosSupervisor();

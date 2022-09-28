@@ -29,11 +29,11 @@ const queries = {
     
 
     //Querys Supervisor
-    datosfotosAdminRevisar: "select idSARIestatus_id,idSARIfotos,base64,estatus,nombre, T1.idRedJalisco from core_sarifotos T0 inner join core_sariestatus T1 on T0.idSARIestatus_id=T1.idSARIestatus where idSARIestatus_id=@idSARIestatus order by estatus,nombre",
+    datosfotosAdminRevisar: "select idSARIestatus_id,idSARIfotos,base64,estatus,nombre, T1.idRedJalisco_id,T0.numEquipo from core_sarifotos T0 inner join core_sariestatus T1 on T0.idSARIestatus_id=T1.idSARIestatus where idSARIestatus_id=@idSARIestatus order by estatus,nombre",
     borrarfotoAdminRevisar: "delete from core_sarifotos where idSARIfotos=@id",
-    getDatos_sitiosSupervisor:"select idSARIestatus,estatusInfo,estatusSave,idRedJalisco,( CONCAT(T1.nombre,' ',T1.apellidos)) as 'nombre' from core_sariestatus T0 inner join core_sariusarios T1 on T0.usuario=T1.idSARIusuarios  where estatusInfo='Borrador' and estatusSave='Despues'",
+    getDatos_sitiosSupervisor:"select idSARIestatus,estatusInfo,estatusSave,idRedJalisco,( CONCAT(T1.nombre,' ',T1.apellidos)) as 'nombre',CONVERT(varchar,T2.Fecha) as 'Fecha', T2.proveedor from core_sariestatus T0 inner join core_sariusarios T1 on T0.usuario=T1.idSARIusuarios inner join core_sarisitios T2 on T2.idRedJalisco=T0.idRedJalisco_id where estatusInfo='Borrador' and estatusSave='Despues'",
     enviarProtocoloAnalisis:"update core_sariestatus set estatusInfo='Enviado' where idSARIestatus=@idSARIestatus",
-    getDatos_sitiosAnalisis:"select idSARIestatus,estatusInfo,estatusSave,idRedJalisco,( CONCAT(T1.nombre,' ',T1.apellidos)) as 'nombre' from core_sariestatus T0 inner join core_sariusarios T1 on T0.usuario=T1.idSARIusuarios  where estatusInfo='Enviado' and estatusSave='Despues'",
-
+    getDatos_sitiosAnalisis:"select idSARIestatus,estatusInfo,estatusSave,idRedJalisco,( CONCAT(T1.nombre,' ',T1.apellidos)) as 'nombre',CONVERT(varchar,T2.Fecha) as 'Fecha', T2.proveedor from core_sariestatus T0 inner join core_sariusarios T1 on T0.usuario=T1.idSARIusuarios inner join core_sarisitios T2 on T2.idRedJalisco=T0.idRedJalisco_id where estatusInfo='Enviado' and estatusSave='Despues'",
+    datosfotosAnalisisRevisar:"select idSARIestatus_id,idSARIfotos,base64,estatus,nombre, T1.idRedJalisco_id,T0.numEquipo from core_sarifotos T0 inner join core_sariestatus T1 on T0.idSARIestatus_id=T1.idSARIestatus where idSARIestatus_id=@idSARIestatus_idGlobal_Analisis order by estatus,nombre"
 }
 exports.queries = queries
