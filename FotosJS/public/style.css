@@ -118,3 +118,17 @@
       font-size: 18px;
       font-weight: 100;
     }
+
+    
+    ::-webkit-input-placeholder { /* WebKit browsers */
+      color: rgba(255, 255, 255, 0.809);
+      }
+      :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color: rgba(255, 255, 255, 0.809);
+      }
+      ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color: rgba(255, 255, 255, 0.809);
+      }
+      :-ms-input-placeholder { /* Internet Explorer 10+ */
+      color: rgba(255, 255, 255, 0.809);
+      }

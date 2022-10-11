@@ -76,184 +76,193 @@
 
     <br>
     
-    <div class="row center">
+    <div class="row center" id="contenedorMensaje" style="display: block;">
+      <label id="lblMensaje" style="color: white; font-weight: bold;font-size: 2rem;"></label>
+    </div>
+
+    <div class="row center" id="contenedorValidaciones" style="display: none;">
       <form action="validaProtocolo_Analisis" method="POST">
-        <input type="hidden" name="idSARIestatus" id="idSARIestatus" value="">
+        <input type="hidden" name="idSARIestatusValida" id="idSARIestatusValida" value="">
         <button class="btn col s12" type="submit">Valida Protocolo</button>
       </form>
       <form action="regresarProtocolo_Analisis" method="POST">
-        <label class="letrasObservaciones">Observaciones:</label><input style="color: white;font-weight: bold;" type="text" name="observacionesSupervisor" id="observacionesSupervisor" value="">
+        <input type="hidden" name="idSARIestatusObservaciones" id="idSARIestatusObservaciones" value="">
+        <label class="letrasObservaciones">Observaciones:</label>
+        <input placeholder="Observaciones" required style="color: white;font-weight: bold;" class="materialize-textarea" type="text" name="txtObservacionesAnalisis" id="txtObservacionesAnalisis" value="" maxlength="250">
         <button class="btn col s12" type="submit">Regresar protocolo al supervisor</button>
       </form>
     </div>
 
-    <ul class="collapsible expandable">
-      <li>
-        <div class="collapsible-header"><i class="material-icons">arrow_back</i>Antes</div>
-          <div class="collapsible-body">
-            <ul class="collapsible expandable antes">
-              <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Fachada sitio </div>
-                  <div class="collapsible-body" id="collapser_fachasadaSitio">
-                    <form action="borrarFotoAdmin" method="post" style="min-width: 186px; max-width: 386px;padding: 2px;">
-                      <!--<img class="estiloImagenVerAdmin" src="Images/redJlisco.jpeg" alt="">
-                      Foto <label class="letraNumeroEquipo">1</label> 
-                      <input type="hidden" name="idImagenEliAdmin" value="">
-                      <button type="submit"><span class="material-icons" style="color: red;">delete</span></button>
-                    </form>-->
+    <div id="contenedorFotos" style="display: none;">
+      <ul class="collapsible expandable">
+        <li>
+          <div class="collapsible-header"><i class="material-icons">arrow_back</i>Antes</div>
+            <div class="collapsible-body">
+              <ul class="collapsible expandable antes">
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Fachada sitio </div>
+                    <div class="collapsible-body" id="collapser_fachasadaSitio">
+                      <form action="borrarFotoAdmin" method="post" style="min-width: 186px; max-width: 386px;padding: 2px;">
+                        <!--<img class="estiloImagenVerAdmin" src="Images/redJlisco.jpeg" alt="">
+                        Foto <label class="letraNumeroEquipo">1</label> 
+                        <input type="hidden" name="idImagenEliAdmin" value="">
+                        <button type="submit"><span class="material-icons" style="color: red;">delete</span></button>
+                      </form>-->
+                    </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. de Área de Switch</div>
+                  <div class="collapsible-body" id="collapser_AntesVistaGralAreaSwitch">
+                  
                   </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. y Acercamiento de Equipo Existente</div>
+                  <div class="collapsible-body" id="collapser_AntesVistaGralAcercamientoEquip">
+
+                  </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vistas Gral. de Área de AP</div>
+                  <div class="collapsible-body" id="collapser_AntesVistaGralAreaAP">
+
+                  </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Switch</div>
+                  <div class="collapsible-body" id="collapser_AntesSwitch">
+
+                  </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Access Points</div>
+                  <div class="collapsible-body" id="collapser_AntesAccessPoint">
+
+                  </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Elementos Pasivos</div>
+                  <div class="collapsible-body" id="collapser_AntesElemPasi">
+
+                  </div>
+                </li>
+                <li class="fondoClaroCollapser">
+                  <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Etiqueta Series Switch/AP/Pasivo</div>
+                  <div class="collapsible-body" id="collapser_AntesEtiquetaSeriesSwitch">
+
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+        </li> <!-- ////////////////////////////////////// Aqui Termina La Parte ANTES ////////////////////////////////////////////////////////// -->
+        <li>
+          <div class="collapsible-header"><i class="material-icons">arrow_downward</i>Durante</div>
+          <div class="collapsible-body">
+            <ul class="collapsible expandable durante">
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Actividades de Instalación</div>
+                <div class="collapsible-body" id="collapser_DuranteActInstaladas">
+
+                </div>
               </li>
               <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. de Área de Switch</div>
-                <div class="collapsible-body" id="collapser_AntesVistaGralAreaSwitch">
-                 
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. Área de Switch</div>
+                <div class="collapsible-body" id="collapser_DuranteVistaGralAreaSwitch">
+
+                </div>
+              </li>
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento a Switch</div>
+                <div class="collapsible-body" id="collapser_DuranteAcercaSwitch">
+
                 </div>
               </li>
               <li class="fondoClaroCollapser">
                 <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. y Acercamiento de Equipo Existente</div>
-                <div class="collapsible-body" id="collapser_AntesVistaGralAcercamientoEquip">
+                <div class="collapsible-body" id="collapser_DuranteVistaGralAcercaEquipExis">
 
                 </div>
               </li>
               <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vistas Gral. de Área de AP</div>
-                <div class="collapsible-body" id="collapser_AntesVistaGralAreaAP">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. Área de AP</div>
+                <div class="collapsible-body" id="collapser_DuranteVistaGralAreaAP">
 
                 </div>
               </li>
               <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Switch</div>
-                <div class="collapsible-body" id="collapser_AntesSwitch">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento APs</div>
+                <div class="collapsible-body" id="collapser_DuranteAcercamientoAPS">
 
                 </div>
               </li>
               <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Access Points</div>
-                <div class="collapsible-body" id="collapser_AntesAccessPoint">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. área de Equipo Pasivo</div>
+                <div class="collapsible-body" id="collapser_DuranteVistaGralEquipPasivo">
 
                 </div>
               </li>
               <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Elementos Pasivos</div>
-                <div class="collapsible-body" id="collapser_AntesElemPasi">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento a Equipo Pasivo</div>
+                <div class="collapsible-body" id="collapser_DuranteAcercaEquipPasivo">
 
                 </div>
               </li>
               <li class="fondoClaroCollapser">
-                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Etiqueta Series Switch/AP/Pasivo</div>
-                <div class="collapsible-body" id="collapser_AntesEtiquetaSeriesSwitch">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Etiquetado Switch/Ap/Pasivo</div>
+                <div class="collapsible-body" id="collapser_DuranteEtiSwitchApPasivo">
 
                 </div>
               </li>
             </ul>
           </div>
-      </li> <!-- ////////////////////////////////////// Aqui Termina La Parte ANTES ////////////////////////////////////////////////////////// -->
-      <li>
-        <div class="collapsible-header"><i class="material-icons">arrow_downward</i>Durante</div>
-        <div class="collapsible-body">
-          <ul class="collapsible expandable durante">
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Actividades de Instalación</div>
-              <div class="collapsible-body" id="collapser_DuranteActInstaladas">
+        </li> <!-- ////////////////////////////////////// Aqui Termina La Parte DURANTE ////////////////////////////////////////////////////////// -->
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. Área de Switch</div>
-              <div class="collapsible-body" id="collapser_DuranteVistaGralAreaSwitch">
+        <li>
+          <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Despues</div>
+          <div class="collapsible-body">
+            <ul class="collapsible expandable despues">
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento conectores RJ45</div>
+                <div class="collapsible-body" id="collapser_DespuesAcercaConecRJ45">
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento a Switch</div>
-              <div class="collapsible-body" id="collapser_DuranteAcercaSwitch">
+                </div>
+              </li>
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Prueba de continuidad UTP</div>
+                <div class="collapsible-body" id="collapser_DespuesPruebaContUTP">
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. y Acercamiento de Equipo Existente</div>
-              <div class="collapsible-body" id="collapser_DuranteVistaGralAcercaEquipExis">
+                </div>
+              </li>
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Rutas de Cableado Ext/Int</div>
+                <div class="collapsible-body" id="collapser_DespuesRutasCableExt">
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. Área de AP</div>
-              <div class="collapsible-body" id="collapser_DuranteVistaGralAreaAP">
+                </div>
+              </li>
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acometida aérea</div>
+                <div class="collapsible-body" id="collapser_DespuesAcoAerea">
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento APs</div>
-              <div class="collapsible-body" id="collapser_DuranteAcercamientoAPS">
+                </div>
+              </li>
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Pases de Muro/Loza</div>
+                <div class="collapsible-body" id="collapser_DespuesPasesMuroLoza">
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Vista Gral. área de Equipo Pasivo</div>
-              <div class="collapsible-body" id="collapser_DuranteVistaGralEquipPasivo">
+                </div>
+              </li>
+              <li class="fondoClaroCollapser">
+                <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Impermeabilización</div>
+                <div class="collapsible-body" id="collapser_DespuesImper">
 
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento a Equipo Pasivo</div>
-              <div class="collapsible-body" id="collapser_DuranteAcercaEquipPasivo">
-
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Etiquetado Switch/Ap/Pasivo</div>
-              <div class="collapsible-body" id="collapser_DuranteEtiSwitchApPasivo">
-
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li> <!-- ////////////////////////////////////// Aqui Termina La Parte DURANTE ////////////////////////////////////////////////////////// -->
-      <li>
-        <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Despues</div>
-        <div class="collapsible-body">
-          <ul class="collapsible expandable despues">
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acercamiento conectores RJ45</div>
-              <div class="collapsible-body" id="collapser_DespuesAcercaConecRJ45">
-
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Prueba de continuidad UTP</div>
-              <div class="collapsible-body" id="collapser_DespuesPruebaContUTP">
-
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Rutas de Cableado Ext/Int</div>
-              <div class="collapsible-body" id="collapser_DespuesRutasCableExt">
-
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Acometida aérea</div>
-              <div class="collapsible-body" id="collapser_DespuesAcoAerea">
-
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Pases de Muro/Loza</div>
-              <div class="collapsible-body" id="collapser_DespuesPasesMuroLoza">
-
-              </div>
-            </li>
-            <li class="fondoClaroCollapser">
-              <div class="collapsible-header"><i class="material-icons">arrow_forward</i>Impermeabilización</div>
-              <div class="collapsible-body" id="collapser_DespuesImper">
-
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li> <!-- ////////////////////////////////////// Aqui Termina La Parte DESPUES ////////////////////////////////////////////////////////// -->
-    </ul>
-
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li> <!-- ////////////////////////////////////// Aqui Termina La Parte DESPUES ////////////////////////////////////////////////////////// -->
+      </ul>
+    </div>
 
     <script src="js/analisis.js"></script>
 

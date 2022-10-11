@@ -7,12 +7,13 @@ const multer = require('multer')
 const puerto = 3002
 
 
-const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW,cerrarEvento,datosfotosAdminRevisar,borrarfotoAdminRevisar,getDatos_sitiosSupervisor,getDatos_sitiosAnalisis,datosfotosAnalisisRevisar,enviarProtocoloAnalisis} = require ('./controllers/database')
+const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW,cerrarEvento,datosfotosAdminRevisar,borrarfotoAdminRevisar,getDatos_sitiosSupervisor,getDatos_sitiosAnalisis,datosfotosAnalisisRevisar,enviarProtocoloAnalisis,analisis_MandarObservaciones,protocoloValidadoAnalisis} = require ('./controllers/database')
 
 
 const { Console } = require('console')
 const { response } = require('express')
 const { Resolver } = require('dns')
+const { red } = require('color-name')
 
 var jso
 var idRed 
@@ -350,7 +351,7 @@ function server(){
           })
 
         } catch (error) {
-          console.log(error)
+          console.log(`Error app en borrarFotoAdmin :: ${error}`)
         }
       });
 
@@ -367,7 +368,7 @@ function server(){
             res.json(inf)
           })
         } catch (error) {
-          console.log(error);
+          console.log(`Error app en informacionDatosSitioSupervisor :: ${error}`);
         }
       });
 
@@ -378,7 +379,7 @@ function server(){
             res.json(inf)
           })
         } catch (error) {
-          console.log(error);
+          console.log(`Error app en getDatos_sitiosAnalisis :: ${error}`);
         }
       });
 
@@ -394,13 +395,39 @@ function server(){
             res.redirect('/fotosAnalisisRevisar')
           })
         } catch (error) {
-          console.log(error);
+          console.log(`Error app en datosfotosAnalisisRevisar :: ${error}`);
         }
       });
 
       
       app.get('/informacionDatosSitioAnalisis',(req,res)=>{
         res.json(datosAnalisis)
+      });
+
+
+      app.post('/regresarProtocolo_Analisis',(req,res)=>{
+        try {
+          const{txtObservacionesAnalisis,idSARIestatusObservaciones} = req.body;
+          analisis_MandarObservaciones(txtObservacionesAnalisis,idSARIestatusObservaciones)
+          .then((infObs)=>{
+            res.redirect('/analisis')
+          })
+
+        } catch (error) {
+          
+        }
+      });
+
+      app.post('/validaProtocolo_Analisis',(req,res)=>{
+        try {
+          const{idSARIestatusValida} = req.body;
+          protocoloValidadoAnalisis(idSARIestatusValida)
+          .then((infValida)=>{
+            res.redirect('/analisis')
+          })
+        } catch (error) {
+          console.log(`Error app en validaProtocolo_Analisis :: ${error}`);
+        }
       });
 
       app.post('/photoDB',upload.single('ProductImage'),(req,res)=>{

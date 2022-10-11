@@ -556,9 +556,42 @@ const document = this;
                 })
 
             } catch (error) {
-                console.log(`Error en la extraccion de datosfotosAnalisisRevisar: ${error}`)
+                console.log(`Error en la extraccion de datosfotosAnalisisRevisar: ${error}`);
             }
         };
+
+        const analisis_MandarObservaciones = async(observacionesAnalisis,idSARIestatusObservaciones,req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request()
+                .input("observacionesAnalisis",sql.VarChar,observacionesAnalisis)
+                .input("idSARIestatusObservaciones",sql.Int,idSARIestatusObservaciones)
+                .query(queries.analisis_MandarObservaciones)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+
+            } catch (error) {
+                console.log(`Error en la extraccion de analisis_MandarObservaciones: ${error}`); 
+            }
+        };
+
+        const protocoloValidadoAnalisis = async(idSARIestatus,req,res)=>{
+            try {
+                const pool = await getConnection()
+                const result = await pool.request()
+                .input("idSARIestatus",sql.Int,idSARIestatus)
+                .query(queries.protocoloValidadoAnalisis)
+
+                return new Promise((resolver,reject)=>{
+                    resolver(result['recordset'])
+                })
+
+            } catch (error) {
+                console.log(`Error de dataBase en protocoloValidadoAnalisis: ${error}`);   
+            }
+        }
 
         const getAPSW = async (idRedJalisco,req,res)=>{
             
@@ -618,4 +651,6 @@ const document = this;
     exports.enviarProtocoloAnalisis = enviarProtocoloAnalisis
     exports.getDatos_sitiosAnalisis = getDatos_sitiosAnalisis
     exports.datosfotosAnalisisRevisar = datosfotosAnalisisRevisar
+    exports.analisis_MandarObservaciones = analisis_MandarObservaciones
+    exports.protocoloValidadoAnalisis = protocoloValidadoAnalisis
 

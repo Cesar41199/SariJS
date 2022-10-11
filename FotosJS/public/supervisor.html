@@ -18,6 +18,20 @@
             color: blue;
             font-weight: bold;
         }
+
+        ::-webkit-input-placeholder { /* WebKit browsers */
+        color: rgba(255, 255, 255, 0.809);
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: rgba(255, 255, 255, 0.809);
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: rgba(255, 255, 255, 0.809);
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+        color: rgba(255, 255, 255, 0.809);
+        }
+
     </style>
 
 </head>
@@ -28,24 +42,28 @@
             
           <a href="/inicio" class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
             
-            
             <ul class="left">
-
             </ul>
             
-            <ul class="right hide-on-small-and-down">             
-       
+            <ul class="right hide-on-small-and-down">       
             </ul>          
-                
                 
         </div>
         <div class="nav-content col s12">
             <ul class="tabs tabs-transparent col s12">
-                
-            
             </ul>
-          </div>
+        </div>
     </nav>
+
+    <div class="row">
+        <div class="col s12">
+            <br>
+            <form action="">
+                <label  style="color: white; font-weight: bold;" class="">Buscar:</label> <input placeholder="Busqueda" style="color: white; font-weight: bold;" type="text" id="txtBusqueda" onkeyup="Buscar();" class="form-control"></input>
+            </form>
+        </div>
+    </div>
+
     <div style="overflow-x:auto;" class="container"> <!-- TABLE -->
         
         <table class="styled-table responsive-table " id="tabla-inicio">
@@ -62,7 +80,7 @@
             </thead>
             <tbody>
               
-        </tbody>
+            </tbody>
       </table>
 
       

@@ -69,8 +69,13 @@ function llenarDatosImagenes(){
         let collapser_DespuesAcoAerea = document.querySelector('#collapser_DespuesAcoAerea');
         let collapser_DespuesPasesMuroLoza = document.querySelector('#collapser_DespuesPasesMuroLoza');
         let collapser_DespuesImper = document.querySelector('#collapser_DespuesImper');
-        let idSARIestatus = document.querySelector('input[name="idSARIestatus"]');
+        let idSARIestatusValida = document.querySelector('input[name="idSARIestatusValida"]');
+        let idSARIestatusObservaciones = document.querySelector('input[name="idSARIestatusObservaciones"]');
         let tituloSitio = document.getElementById('tituloSitio');
+
+        let contenedorValidaciones = document.getElementById("contenedorValidaciones");
+        let contenedorFotos = document.getElementById("contenedorFotos"); 
+        let contenedorMensaje = document.getElementById("contenedorMensaje"); 
 
         
                       
@@ -89,104 +94,143 @@ function llenarDatosImagenes(){
         let conteo3Despues=0;
 
             for (const tablafotosAdmin of tablaInf){
-                idSARIestatus.value=tablafotosAdmin.idSARIestatus_id;
-                tituloSitio.textContent= "Sitio  " + tablafotosAdmin.idRedJalisco_id;
-                console.log(idSARIestatus)
-                if  (tablafotosAdmin.estatus == 'Antes'){
-                    conteoAntes=conteoAntes+1;
-                    if  (tablafotosAdmin.nombre == 'Fachada de Sitio'){
-                        collapserFachadaSitio.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-    
-                    if  (tablafotosAdmin.nombre == 'Vista Gral. de Área de Switch'){
-                        collapser_AntesVistaGralAreaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    } 
-    
-                    if  (tablafotosAdmin.nombre == 'Vista Gral. y Acercamiento de Equipo Existente'){
-                        collapser_AntesVistaGralAcercamientoEquip.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }   
-    
-                    if  (tablafotosAdmin.nombre == 'Vistas Gral. de Área de AP'){
-                        collapser_AntesVistaGralAreaAP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    } 
-    
-                    if  (tablafotosAdmin.nombre == 'Switch'){
-                        collapser_AntesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    } 
-    
-                    if  (tablafotosAdmin.nombre == 'Access Points'){
-                        collapser_AntesAccessPoint.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    } 
-    
-                    if  (tablafotosAdmin.nombre == 'Elementos Pasivos'){
-                        collapser_AntesElemPasi.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    } 
-    
-                    if  (tablafotosAdmin.nombre == 'Etiqueta Series Switch/AP/Pasivo'){
-                        collapser_AntesEtiquetaSeriesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
+                if  (tablafotosAdmin.estatusInfo == 'Aceptado'){
+                    contenedorValidaciones.style.display = "none";
+                    contenedorFotos.style.display = "none";
+                    contenedorMensaje.style.display = "block";
+                    document.getElementById('lblMensaje').textContent='Este protocolo ya ha sido validado'
+                }else{
+                    contenedorValidaciones.style.display = "block";
+                    contenedorFotos.style.display = "block";
 
-                } /* //////////////////////////////////// *** FIN del ANTES *** ////////////////////////////////////////////// */ 
+                    idSARIestatusValida.value=tablafotosAdmin.idSARIestatus_id;
+                    idSARIestatusObservaciones.value=tablafotosAdmin.idSARIestatus_id;
+                    tituloSitio.textContent= "Sitio  " + tablafotosAdmin.idRedJalisco_id;
+                    console.log(idSARIestatus)
 
-                if (tablafotosAdmin.estatus == 'Durante'){
-                    conteo2Durante=conteo2Durante+1;
-                    if (tablafotosAdmin.nombre == 'Actividades de Instalación'){
-                        collapser_DuranteActInstaladas.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Vista Gral. Área de Switch'){
-                        collapser_DuranteVistaGralAreaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Acercamiento a Switch'){
-                        collapser_DuranteAcercaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Vista Gral.  y Acercamiento de Equipo Existente'){
-                        collapser_DuranteVistaGralAcercaEquipExis.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Vista Gral. Área de AP'){
-                        collapser_DuranteVistaGralAreaAP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Acercamiento APs'){
-                        collapser_DuranteAcercamientoAPS.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Vista Gral. área de Equipo Pasivo'){
-                        collapser_DuranteVistaGralEquipPasivo.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Acercamiento a Equipo Pasivo'){
-                        collapser_DuranteAcercaEquipPasivo.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Etiquetado Switch/Ap/Pasivo'){
-                        collapser_DuranteEtiSwitchApPasivo.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                } /* //////////////////////////////////// *** FIN del DURANTE *** ////////////////////////////////////////////// */
+                    if  (tablafotosAdmin.estatus == 'Antes'){
+                        conteoAntes=conteoAntes+1;
+                        if  (tablafotosAdmin.nombre == 'Fachada de Sitio'){
+                            collapserFachadaSitio.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+        
+                        if  (tablafotosAdmin.nombre == 'Vista Gral. de Área de Switch'){
+                            collapser_AntesVistaGralAreaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        } 
+        
+                        if  (tablafotosAdmin.nombre == 'Vista Gral. y Acercamiento de Equipo Existente'){
+                            collapser_AntesVistaGralAcercamientoEquip.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }   
+        
+                        if  (tablafotosAdmin.nombre == 'Vistas Gral. de Área de AP'){
+                            collapser_AntesVistaGralAreaAP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        } 
+        
+                        if  (tablafotosAdmin.nombre == 'Switch'){
+                            collapser_AntesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        } 
+        
+                        if  (tablafotosAdmin.nombre == 'Access Points'){
+                            collapser_AntesAccessPoint.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        } 
+        
+                        if  (tablafotosAdmin.nombre == 'Elementos Pasivos'){
+                            collapser_AntesElemPasi.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        } 
+        
+                        if  (tablafotosAdmin.nombre == 'Etiqueta Series Switch/AP/Pasivo'){
+                            collapser_AntesEtiquetaSeriesSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${tablafotosAdmin.numEquipo} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
 
-                if (tablafotosAdmin.estatus == 'Despues'){
-                    conteo3Despues=conteo3Despues+1;
-                    if (tablafotosAdmin.nombre == 'Acercamiento conectores RJ45'){
-                        collapser_DespuesAcercaConecRJ45.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Prueba de continuidad UTP'){
-                        collapser_DespuesPruebaContUTP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Rutas de Cableado Ext/Int'){
-                        collapser_DespuesRutasCableExt.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Acometida aérea'){
-                        collapser_DespuesAcoAerea.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Pases de Muro/Loza'){
-                        collapser_DespuesPasesMuroLoza.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                    if (tablafotosAdmin.nombre == 'Impermeabilización'){
-                        collapser_DespuesImper.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
-                    }
-                } /* //////////////////////////////////// *** FIN del DESPUES *** ////////////////////////////////////////////// */
-                
+                    } /* //////////////////////////////////// *** FIN del ANTES *** ////////////////////////////////////////////// */ 
+
+                    if (tablafotosAdmin.estatus == 'Durante'){
+                        conteo2Durante=conteo2Durante+1;
+                        if (tablafotosAdmin.nombre == 'Actividades de Instalación'){
+                            collapser_DuranteActInstaladas.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Vista Gral. Área de Switch'){
+                            collapser_DuranteVistaGralAreaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Acercamiento a Switch'){
+                            collapser_DuranteAcercaSwitch.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Vista Gral.  y Acercamiento de Equipo Existente'){
+                            collapser_DuranteVistaGralAcercaEquipExis.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Vista Gral. Área de AP'){
+                            collapser_DuranteVistaGralAreaAP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Acercamiento APs'){
+                            collapser_DuranteAcercamientoAPS.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Vista Gral. área de Equipo Pasivo'){
+                            collapser_DuranteVistaGralEquipPasivo.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Acercamiento a Equipo Pasivo'){
+                            collapser_DuranteAcercaEquipPasivo.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Etiquetado Switch/Ap/Pasivo'){
+                            collapser_DuranteEtiSwitchApPasivo.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                    } /* //////////////////////////////////// *** FIN del DURANTE *** ////////////////////////////////////////////// */
+
+                    if (tablafotosAdmin.estatus == 'Despues'){
+                        conteo3Despues=conteo3Despues+1;
+                        if (tablafotosAdmin.nombre == 'Acercamiento conectores RJ45'){
+                            collapser_DespuesAcercaConecRJ45.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Prueba de continuidad UTP'){
+                            collapser_DespuesPruebaContUTP.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Rutas de Cableado Ext/Int'){
+                            collapser_DespuesRutasCableExt.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Acometida aérea'){
+                            collapser_DespuesAcoAerea.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Pases de Muro/Loza'){
+                            collapser_DespuesPasesMuroLoza.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                        if (tablafotosAdmin.nombre == 'Impermeabilización'){
+                            collapser_DespuesImper.innerHTML += `${primerParteImagen} ${tablafotosAdmin.base64} ${segundaParteImagen} ${parte_conteo} ${tablafotosAdmin.idSARIfotos} ${tercerParte}`
+                        }
+                    } /* //////////////////////////////////// *** FIN del DESPUES *** ////////////////////////////////////////////// */
+                }
             }
 
         })
     } catch (error) {
         
     }
+};
+
+
+function Buscar() {
+    try{
+    var tabla = document.getElementById('tabla-inicio');
+    var busqueda = document.getElementById('txtBusqueda').value.toLowerCase();
+    var cellsOfRow="";
+    var found=false;
+    var compareWith="";
+    for (var i = 1; i < tabla.rows.length; i++) {
+        cellsOfRow = tabla.rows[i].getElementsByTagName('td');
+        found = false;
+        for (var j = 0; j < cellsOfRow.length && !found; j++) { compareWith = cellsOfRow[j].innerHTML.toLowerCase(); if (busqueda.length == 0 || (compareWith.indexOf(busqueda) > -1))
+            {
+                found = true;
+            }
+        }
+        if(found)
+        {
+            tabla.rows[i].style.display = '';
+        } else {
+            tabla.rows[i].style.display = 'none';
+        }
+    }
+  }catch(e){
+    console.log(e)
+  }
 };
   
 

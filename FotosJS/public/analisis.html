@@ -12,6 +12,8 @@
 
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
 </head>
 <body>
     <!-- MENU  -->
@@ -41,17 +43,27 @@
     </nav>
     <!--<div class="container">-->
 
+
+      <div class="row">
+        <div class="col s12">
+            <br>
+            <form action="">
+                <label  style="color: white; font-weight: bold;" class="">Buscar:</label> <input placeholder="Busqueda" style="color: white; font-weight: bold;" type="text" id="txtBusqueda" onkeyup="Buscar();" class="form-control"></input>
+            </form>
+        </div>
+    </div>
+
       <div style="overflow-x:auto;" class="container"> <!-- TABLE -->
         <table class="styled-table responsive-table " id="tabla-inicio">
             <thead>
                 <tr>
-                    <th>###</th>
-                    <th>Sitio</th>
-                    <th>Estatus Sitio</th>
-                    <th>Estatus Informacion</th>
-                    <th>Nombre Proveedor</th>
-                    <th>Fecha</th>
-                    <th>Proveedor</th>
+                  <th>###</th>
+                  <th>Sitio</th>
+                  <th>Estatus Sitio</th>
+                  <th>Estatus Informacion</th>
+                  <th>Nombre Proveedor</th>
+                  <th>Fecha</th>
+                  <th>Proveedor</th>
                 </tr>
             </thead>
             <tbody>
