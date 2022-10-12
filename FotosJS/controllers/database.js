@@ -243,6 +243,7 @@ const document = this;
         console.log(error)
     }
     }
+  
 
     const Imageupload = async (imagen,estatus,nombre,idSitio,numEquipo,req, res) => {       
         
@@ -580,6 +581,32 @@ const document = this;
                 }
             
                 };
+                const ver = async (req, res) => {       
+                    try {
+                
+                        const pool = await getConnection()
+                        const result = await pool.request()
+                        
+                       
+                        .query(queries.ver)
+                        //console.log(result)
+                        //res.json(result.recordset)
+                
+                        return new Promise((resolve,reject)=>{
+                            resolve(result['recordset']);
+                        })
+                
+                        //return res.request(result);
+                
+                        //return res.send(result.recordset);
+                
+                
+                        //res.send('index',{result});
+                        //res.json(result.recordset)
+                    } catch (error) {
+                        console.log(`error al ver${error}`)
+                    }
+                    }
     exports.getProducts = getProducts
     exports.createUser = createUser
     exports.getPassword = getPassword
@@ -605,4 +632,5 @@ const document = this;
     exports.Infoid=Infoid
     exports.Series1 = Series1
     exports.Series2 = Series2
+    exports.ver = ver
     exports.getInformacion_series= getInformacion_series

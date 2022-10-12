@@ -8,7 +8,8 @@ const puerto = 3002
 const host = '10.250.1.19'
 const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,
   MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,
-  Infousuario,CheckEstatus,getAPSW,getInformacion_protocolos,Infoid,getInformacion_series,Series1,Series2} = require ('./controllers/database')
+  Infousuario,CheckEstatus,getAPSW,getInformacion_protocolos,Infoid,getInformacion_series,Series1,Series2,ver
+} = require ('./controllers/database')
 
 const { Console } = require('console')
 const { response } = require('express')
@@ -19,11 +20,7 @@ const session = require('express-session')
 const PassportLocal = require('passport-local').Strategy
 
 const upload = multer({storage:multer.memoryStorage()})
-var uploadAP2 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 },{ name: 'aimagen3', maxCount:2 },{ name: 'aimagen4', maxCount:3 }])
-var uploadAP3 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 }])
-var uploadMultiple = upload.fields([{ name: 'imagen1', maxCount:2}, { name: 'imagen2', maxCount:2 },{ name: 'imagen3', maxCount:4 },{ name: 'imagen4', maxCount:2 },{ name: 'imagen5', maxCount:2 },{ name: 'imagen6', maxCount:3 },{ name: 'imagen7', maxCount:3 },{ name: 'imagen8', maxCount:3 }])
-var uploadMultipleDurante = upload.fields([{ name: 'imagen1', maxCount:9}, { name: 'imagen2', maxCount:2 },{ name: 'imagen3', maxCount:2 },{ name: 'imagen4', maxCount:4 },{ name: 'imagen5', maxCount:2 },{ name: 'imagen6', maxCount:2 },{ name: 'imagen7', maxCount:1 },{ name: 'imagen8', maxCount:2 },{ name: 'imagen9', maxCount:3 }])
-var uploadMultipleDespues = upload.fields([{ name: 'imagen1', maxCount:6}, { name: 'imagen2', maxCount:1 },{ name: 'imagen3', maxCount:5 },{ name: 'imagen4', maxCount:3 },{ name: 'imagen5', maxCount:4 },{ name: 'imagen6', maxCount:5 },{ name: 'imagen7', maxCount:2 },{ name: 'imagen8', maxCount:2 },{ name: 'imagen9', maxCount:1 },,{ name: 'imagen10', maxCount:1 }])
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine','ejs')
@@ -202,6 +199,16 @@ app.get('/fotosaprovada',(req,res,next)=>{
       }, (req, res) => {
         res.sendFile(path.resolve(__dirname,'public/imagen.html'))
        })
+      //  app.get('/ver',(req,res,next)=>{
+      //   if(req.isAuthenticated())return next();
+      //  ver().then((info)=>{
+      //   res.json(info)
+
+      //  })
+      // }, (req, res) => {
+      //   res.sendFile(path.resolve(__dirname,'public/imagen.html'))
+      //  })
+
 ////////////////VISTAS REQ/////////////////////////////////////////////////////////////      
       app.get('/fotos',(req,res,next)=>{
         if(req.isAuthenticated())return next();

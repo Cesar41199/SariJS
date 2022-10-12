@@ -28,7 +28,7 @@ const queries = {
     getAPSW:'select AP,SW from core_sarisitios where idRedJalisco = @idRedJalisco', 
     getProtocolos:'select  core_sitios_abonados.idRedJalisco,fechaAmpliacion,coordenadaLatitudMesaDeAyuda,coordenadaLongitudMesaDeAyuda,descripcion,direccionMesaDeAyuda from core_sitios_abonados  where estatusAmpliacion_id = 2 or estatusAmpliacion_id = 4 ', 
     getSeries:'select idRegistro_Series,numSerieMA,idRedJalisco_id,codigoEquipo_id,numeroEquipos from core_registro_series ',
-     
+    ver:"select base64 from core_sarifotos where idSARIestatus_id= 2 and nombre = 'Prueba de continuidad UTP'",
 
 
     ///
