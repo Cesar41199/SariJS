@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolos</title>
+    <link rel="icon" href="Images/IconoApp.ico">
+    <link rel="stylesheet" href="style.css">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <script src="js/jQuery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.4/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://unpkg.com/qrious@4.0.2/dist/qrious.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+
+</head>
+<body>
+
+    
+    <!-- MENU  -->
+    <nav class="grey darken-4 nav-extended row ">
+        <div class="nav-wrapper  col s12">
+            
+            <div class="nav-wrapper col s12">
+          
+                <a  class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
+      
+                  <div class="col s1 right">
+                     
+                  </div> 
+                    
+            </div>
+                
+        </div>
+        <div class="nav-content col s12">
+            <ul class="tabs tabs-transparent col s12">
+              
+              <li class="tab col s4"><a href="/etiquetas">Etiquetas</a></li>
+              <li class="tab col s6 right">
+                <form action="/exit" method="post">
+                <button class="btn transparent" type="submit">SALIR</button>
+                </form>
+              </li>
+            
+            </ul>
+          </div>
+    </nav>
+    <div>
+        <img hidden alt='' id="codigo1">
+    </div>
+    <div style="overflow-x:auto;background-color:rgba(0, 0, 0, 0.555);" class="container" > <!-- TABLE -->
+       <div class="row ">
+        <div class="col s4 offset-s1  ">
+            <br>
+            <input placeholder="ID Sitio" class="white-text" type="text" id="inputSitio">
+        </div>
+        <div class="col s1">
+            <br>
+            <a class="btn-floating white"  id="btnClick"><i class=" material-icons" style="color:black ;">search</i></a>
+            
+        </div>
+        <div class="col s2 right">
+            <br>
+            <p>
+                <label  class="white-text">
+                  <input type="checkbox" class="red" id="Todos" />
+                  
+                  <span style="font-size:medium;">Todos</span>
+                </label>
+              </p>
+        </div>
+       </div>
+       <div hidden>
+        <form action="/tablaEtiquetasreq" method="POST">
+        <input type="text" name="date" id="date" value="">
+        <button type="submit" id="btn"></button>
+        </form>
+       </div>
+        <table class="styled-table responsive-table " id="tabla-inicio">
+            <thead>
+                <tr>
+                    <th>###</th>
+                    <th>Sitio</th>  
+                    <th>PDF</th>  
+                    <th>Firmas</th>                  
+                   
+            
+                    
+
+                </tr>
+            </thead>
+            <tbody>
+              
+            <!-- 
+                <tr class="other-row">
+                    <td>0001</td>
+                    <td><a href="/fotosantes">M-JCSSA005053</a></td>
+                    <td>Liberado</td>
+                    <td>Asignado</td>                                          
+                    <td>04/03/2022</td>
+                                     
+                </tr>
+                <tr class="active-row">
+                    <td>0002</td>
+                    <td><a href="">M-JCSSA005053</a></td>
+                    <td>Liberado</td>
+                    <td>Asignado</td>                                        
+                    <td>04/03/2022</td>
+                </tr>
+                <tr class="other-row">
+                    <td>0003</td>
+                    <td><a href="">M-SEJ-1402742F</a></td>
+                    <td>En línea/Validado</td>
+                    <td>Asignado</td>                                        
+                    <td>05/03/2022</td>                 
+              </tr>
+              <tr class="active-row">
+                    <td>0004</td>
+                    <td><a href="">M-SEJ-1403149A</a></td>
+                    <td>En línea/Validado</td>
+                    <td>Asignado</td>                                        
+                    <td>10/03/2022</td> 
+              </tr>
+              <tr class="other-row">
+                    <td>0005</td>
+                    <td><a href="">M-SEJ-1403709J</a></td>
+                    <td>Cancelado/Ubi</td>
+                    <td>Asignado</td>                                        
+                    <td>09/03/2022</td>                  
+              </tr>
+              <tr class="active-row">
+                    <td>0006</td>
+                    <td><a href="">M-SEJ-1404392B</a></td>
+                    <td>Alineado</td> 
+                    <td>Asignado</td>                                       
+                    <td>07/03/2022</td>
+              </tr>
+              <tr class="other-row">
+                    <td>0007</td>
+                    <td><a href="">M-SEJ-1405088E</a></td>
+                    <td>Liberado</td> 
+                    <td>Asignado</td>                                       
+                    <td>08/03/2022</td>                 
+            </tr>
+           
+          
+             -->
+        </tbody>
+      </table>
+    </div>
+    <script src="js/protocolos.js"></script>
+    
+</body>
+</html>

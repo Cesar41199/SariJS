@@ -1,6 +1,6 @@
 function Usuario() {
     try{
-    fetch('http://localhost:3002/usuario')
+    fetch('http://app.grupohemac.com.mx:3002/usuario')
     .then((response) => response.json())
     .then((Usuario)=>{
       //console.log(usuarios)

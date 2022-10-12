@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var obj1
+        var obj2
+    function llenartabla() {
+    try{
+    fetch('http://localhost:3002/Series2')
+    .then((response) => response.json())
+    .then((info)=>{
+       
+        obj2=info
+    
+    })
+    fetch('http://localhost:3002/Series1')
+    .then((response) => response.json())
+    .then((info)=>{
+obj1=info
+     dif()
+    })
+
+    
+  }catch(e){
+    console.log(e)
+  }
+ 
+
+  }
+  function dif(){
+    
+  }
+
+ 
+    
+  
+
+    </script>
+</body>
+</html>

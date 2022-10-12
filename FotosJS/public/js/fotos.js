@@ -1,4 +1,4 @@
-
+﻿
 
 let bool1=false
 let bool2=false
@@ -8,40 +8,43 @@ let bool5=false
 let bool6=false
 let bool7=false
 let bool8=false
-
+let numeroAP=0
 $('#btnGuardar').hide()
 $('#btnGuardar2').hide()
 $('#AP').hide()
 
 function idRed() {
     try{
-    fetch('http://localhost:3002/idRed')
+    fetch('http://app.grupohemac.com.mx:3002/idRed')
     .then((response) => response.json())
     .then((idRed)=>{
       //console.log(usuarios)
       
       let idRedJalisco = document.getElementById('idRedJalisco');
       let idsitio = document.getElementById('idsitio');    
-      let idRedJaliscoAP = document.getElementById('idRedJaliscoAP');
+    //   let idRedJaliscoAP = document.getElementById('idRedJaliscoAP');
       let idsitioAP = document.getElementById('idsitioAP');    
+        
       //console.log(idAlarma_inf);     
         $(idRedJalisco).text(idRed.idRedJalisco_id) 
         $(idsitio).val(idRed.idRedJalisco_id) 
-        $(idRedJaliscoAP).text(idRed.idRedJalisco_id) 
+        // $(idRedJaliscoAP).text(idRed.idRedJalisco_id) 
         $(idsitioAP).val(idRed.idRedJalisco_id) 
     })
   }catch(e){
     console.log(e)
   }
   }
+  idRed()
 
   function numEquipo() {
     try{
-    fetch('http://localhost:3002/numEquipos')
+    fetch('http://app.grupohemac.com.mx:3002/numEquipos')
     .then((response) => response.json())
     .then((numEquipo)=>{
         let xAp = document.querySelector('#divfoto1')
         let Ap = document.getElementById('AP')
+        numeroAP=AP
       //console.log(usuarios)
       let obj
       for ( obj of numEquipo){
@@ -120,102 +123,6 @@ function idRed() {
   }
 
 numEquipo()
-
-// setTimeout(()=>{
-//     if($("#AP").val()>= 2){
-//         ap=$("#AP").val()
-         
-//          for(i=2,cont = 1;i<=ap;i++,cont++){
-//            console.log(cont)
-            
-//             $("#aimage"+cont+"").on('change',function(){
-//                 console.log(cont)
-//                 $("#aimage"+cont+"").change(function(){
-//                     console.log('Cambio')
-//                 var x = document.getElementById('aimage'+cont+'')
-               
-//                 if('files' in x ){
-                    
-//                  if(x.files.length == 2){
-                  
-//                      $('#acheck'+cont+'').show()
-                     
-//                  }else{
-//                      $('#acheck'+cont+'').hide()
-                     
-//                  }
-//                 }  
-//                 });
-//              });
-
-            
-//          }
-//     }
-// },500)
-
-setTimeout(()=>{
-    try {
-        $("#aimage1").change(function(){
-            var x = document.getElementById('aimage1')
-            if('files' in x ){
-           
-             if(x.files.length == 2){
-               
-                 $('#acheck1').show()
-                 bool1=true
-             }else{
-                 $('#acheck1').hide()
-                 bool1=false
-             }
-            }  
-         });
-         $("#aimage2").change(function(){
-            var x = document.getElementById('aimage2')
-            if('files' in x ){
-           
-             if(x.files.length == 3){
-               
-                 $('#acheck2').show()
-                 bool1=true
-             }else{
-                 $('#acheck2').hide()
-                 bool1=false
-             }
-            }  
-         });
-         $("#aimage3").change(function(){
-            var x = document.getElementById('aimage3')
-            if('files' in x ){
-           
-             if(x.files.length == 2){
-               
-                 $('#acheck3').show()
-                 
-             }else{
-                 $('#acheck3').hide()
-                 
-             }
-            }  
-         });
-         $("#aimage4").change(function(){
-            var x = document.getElementById('aimage4')
-            if('files' in x ){
-           
-             if(x.files.length == 3){
-               
-                 $('#acheck4').show()
-                 
-             }else{
-                 $('#acheck4').hide()
-                
-             }
-            }  
-         });
-         
-    } catch (error) {
-        console.log(error)
-    }
-},1000)
 
 $("#image1").change(function(){
    var x = document.getElementById('image1')
@@ -335,14 +242,412 @@ function validar(){
     if(bool1==true && bool2==true && bool3==true && bool4==true && bool5==true && bool5==true && bool6==true && bool7==true && bool8==true){
         console.log('Todo correcto')
         $('#btnGuardar').click()
-        setTimeout(()=>{
-            $('#btnGuardar2').click()
-        },200)
+      
        
     }else{
         console.log('Algo falta')
         
     }
 }
- idRed()
 
+setTimeout(()=>{
+    try {
+
+        $("#aimage1").change(function(){
+            var x = document.getElementById('aimage1')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck1').show()
+                 bool1=true
+             }else{
+                 $('#acheck1').hide()
+                 bool1=false
+             }
+            }  
+         });
+         $("#aimage2").change(function(){
+            var x = document.getElementById('aimage2')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck2').show()
+                 bool1=true
+             }else{
+                 $('#acheck2').hide()
+                 bool1=false
+             }
+            }  
+         });
+         $("#aimage3").change(function(){
+            var x = document.getElementById('aimage3')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck3').show()
+                 
+             }else{
+                 $('#acheck3').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage4").change(function(){
+            var x = document.getElementById('aimage4')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck4').show()
+                 
+             }else{
+                 $('#acheck4').hide()
+                
+             }
+            }  
+         });
+         $("#aimage5").change(function(){
+            var x = document.getElementById('aimage5')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck5').show()
+                 
+             }else{
+                 $('#acheck5').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage6").change(function(){
+            var x = document.getElementById('aimage6')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck6').show()
+                 
+             }else{
+                 $('#acheck6').hide()
+                
+             }
+            }  
+         });
+         $("#aimage7").change(function(){
+            var x = document.getElementById('aimage7')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck7').show()
+                 
+             }else{
+                 $('#acheck7').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage8").change(function(){
+            var x = document.getElementById('aimage8')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck8').show()
+                 
+             }else{
+                 $('#acheck8').hide()
+                
+             }
+            }  
+         });
+         $("#aimage9").change(function(){
+            var x = document.getElementById('aimage9')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck9').show()
+                 
+             }else{
+                 $('#acheck9').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage10").change(function(){
+            var x = document.getElementById('aimage10')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck10').show()
+                 
+             }else{
+                 $('#acheck10').hide()
+                
+             }
+            }  
+         });
+         $("#aimage11").change(function(){
+            var x = document.getElementById('aimage11')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck11').show()
+                 
+             }else{
+                 $('#acheck11').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage12").change(function(){
+            var x = document.getElementById('aimage12')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck12').show()
+                 
+             }else{
+                 $('#acheck12').hide()
+                
+             }
+            }  
+         });
+         $("#aimage13").change(function(){
+            var x = document.getElementById('aimage13')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck13').show()
+                 
+             }else{
+                 $('#acheck13').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage14").change(function(){
+            var x = document.getElementById('aimage14')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck14').show()
+                 
+             }else{
+                 $('#acheck14').hide()
+                
+             }
+            }  
+         });
+         $("#aimage15").change(function(){
+            var x = document.getElementById('aimage15')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck15').show()
+                 
+             }else{
+                 $('#acheck15').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage16").change(function(){
+            var x = document.getElementById('aimage16')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck16').show()
+                 
+             }else{
+                 $('#acheck16').hide()
+                
+             }
+            }  
+         });
+         $("#aimage17").change(function(){
+            var x = document.getElementById('aimage17')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck17').show()
+                 
+             }else{
+                 $('#acheck17').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage18").change(function(){
+            var x = document.getElementById('aimage18')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck18').show()
+                 
+             }else{
+                 $('#acheck18').hide()
+                
+             }
+            }  
+         });
+         $("#aimage19").change(function(){
+            var x = document.getElementById('aimage19')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck19').show()
+                 
+             }else{
+                 $('#acheck19').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage20").change(function(){
+            var x = document.getElementById('aimage20')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck20').show()
+                 
+             }else{
+                 $('#acheck2o').hide()
+                
+             }
+            }  
+         });
+         $("#aimage21").change(function(){
+            var x = document.getElementById('aimage21')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck21').show()
+                 
+             }else{
+                 $('#acheck21').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage22").change(function(){
+            var x = document.getElementById('aimage22')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck22').show()
+                 
+             }else{
+                 $('#acheck22').hide()
+                
+             }
+            }  
+         });
+         $("#aimage23").change(function(){
+            var x = document.getElementById('aimage23')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck23').show()
+                 
+             }else{
+                 $('#acheck23').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage24").change(function(){
+            var x = document.getElementById('aimage24')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck24').show()
+                 
+             }else{
+                 $('#acheck24').hide()
+                
+             }
+            }  
+         });
+         $("#aimage25").change(function(){
+            var x = document.getElementById('aimage25')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck25').show()
+                 
+             }else{
+                 $('#acheck25').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage26").change(function(){
+            var x = document.getElementById('aimage26')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck26').show()
+                 
+             }else{
+                 $('#acheck26').hide()
+                
+             }
+            }  
+         });
+         $("#aimage27").change(function(){
+            var x = document.getElementById('aimage27')
+            if('files' in x ){
+           
+             if(x.files.length == 2){
+               
+                 $('#acheck27').show()
+                 
+             }else{
+                 $('#acheck27').hide()
+                 
+             }
+            }  
+         });
+         $("#aimage28").change(function(){
+            var x = document.getElementById('aimage28')
+            if('files' in x ){
+           
+             if(x.files.length == 3){
+               
+                 $('#acheck28').show()
+                 
+             }else{
+                 $('#acheck28').hide()
+                
+             }
+            }  
+         });
+                  
+         
+    } catch (error) {
+        console.log(error)
+    }
+},1000)

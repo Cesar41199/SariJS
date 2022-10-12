@@ -1,6 +1,6 @@
 function llenartabla() {
     try{
-    fetch('http://localhost:3002/tablaProvedores')
+    fetch('http://app.grupohemac.com.mx:3002/tablaProvedores')
     .then((response) => response.json())
     .then((tabla)=>{
       //console.log(usuarios)

@@ -1,9 +1,8 @@
-const {getConnection,sql} = require ('./database/conect')
+const {getConnection,getConnectionSIA,sql} = require ('./database/conect')
 const {queries} = require ('./database/query')
 
 const bcrypct = require("bcryptjs");
 const { json } = require('body-parser');
-const { async } = require('regenerator-runtime');
 const rondas = 3;
 const document = this;
 
@@ -181,11 +180,28 @@ const document = this;
       
      
     }
-    const   Infousuario = async (username,res,req) => {  
+    const   Infousuario = async (id,res,req) => {  
        
         try{
         const pool = await getConnection()
-        const result = await pool.request().input("username", username).query(queries.infoUser)
+        const result = await pool.request().input("id", id).query(queries.infoUser)
+        
+       
+        return new Promise((resolve, reject) =>{    
+                resolve(result['recordset']) 
+        })     
+        
+        }catch(error){
+                console.log(error)
+        }
+      
+     
+    }
+    const   Infoid = async (username,res,req) => {  
+       
+        try{
+        const pool = await getConnection()
+        const result = await pool.request().input("username", username).query(queries.infoid)
         
        
         return new Promise((resolve, reject) =>{    
@@ -227,6 +243,7 @@ const document = this;
         console.log(error)
     }
     }
+  
 
     const Imageupload = async (imagen,estatus,nombre,idSitio,numEquipo,req, res) => {       
         
@@ -425,15 +442,48 @@ const document = this;
                     resolve(result['recordset']);
                 })
         
-                //return res.request(result);
-        
-                //return res.send(result.recordset);
-        
-        
-                //res.send('index',{result});
-                //res.json(result.recordset)
             } catch (error) {
                 console.log(`Error en la extraccion de informacion de INICIO: ${error}`)
+            }
+        
+        };
+        const getInformacion_protocolos = async (req,res)=>{
+            
+            try {
+                
+                const pool = await getConnection()
+                const result = await pool.request()
+                
+                .query(queries.getProtocolos)
+                //console.log(result)
+                //res.json(result.recordset)
+        
+                return new Promise((resolve,reject)=>{
+                    resolve(result['recordset']);
+                })
+        
+            } catch (error) {
+                console.log(`Error en la extraccion de informacion de informacio_Protocolos: ${error}`)
+            }
+        
+        };
+        const getInformacion_series = async (req,res)=>{
+            
+            try {
+                
+                const pool = await getConnection()
+                const result = await pool.request()
+                
+                .query(queries.getSeries)
+                //console.log(result)
+                //res.json(result.recordset)
+        
+                return new Promise((resolve,reject)=>{
+                    resolve(result['recordset']);
+                })
+        
+            } catch (error) {
+                console.log(`Error en la extraccion de informacion de Series: ${error}`)
             }
         
         };
@@ -444,7 +494,6 @@ const document = this;
                 
                 const pool = await getConnection()
                 const result = await pool.request()
-                
                 .query(queries.getTableEtiquetas)
                 //console.log(result)
                 //res.json(result.recordset)
@@ -463,84 +512,7 @@ const document = this;
             } catch (error) {
                 console.log(`Error en la extraccion de informacion de INICIO: ${error}`)
             }
-        }
-       
-        const datosfotosAdminRevisar = async(idSARIestatus,req,res)=>{
-            try {
-                const pool = await getConnection()
-                const result = await pool.request()
-                .input("idSARIestatus",sql.Int,idSARIestatus)
-                .query(queries.datosfotosAdminRevisar)
-
-                return new Promise((resolver,reject)=>{
-                    resolver(result['recordset'])
-                })
-
-            } catch (error) {
-                console.log(`Error en la extraccion de mas datosfotosAdminRevisar: ${error}`)
-            }
-        };
-
-        const enviarProtocoloAnalisis = async(idSARIestatus,req,res)=>{
-            try {
-                const pool = await getConnection()
-                const result = await pool.request()
-                .input("idSARIestatus",sql.Int,idSARIestatus)
-                .query(queries.enviarProtocoloAnalisis)
-
-                return new Promise((resolver,reject)=>{
-                    resolver(result['recordset'])
-                })
-            } catch (error) {
-                console.log(`Error en la extraccion de mas enviarProtocoloAnalisis: ${error}`)
-            }
-        };
-
         
-        const borrarfotoAdminRevisar = async(idImagenEliAdmin,req,res)=>{
-            try {
-                const pool = await getConnection()
-                const result = await pool.request()
-                .input("id",sql.Int,idImagenEliAdmin)
-                .query(queries.borrarfotoAdminRevisar)
-
-                return new Promise((resolver,reject)=>{
-                    resolver(result['recordset'])
-                })
-
-            } catch (error) {
-                console.log(`Error en la extraccion de mas borrarfotoAdminRevisar: ${error}`)
-            }
-        };
-
-        
-        const getDatos_sitiosSupervisor = async(req,res)=>{
-            try {
-                const pool = await getConnection()
-                const result = await pool.request().query(queries.getDatos_sitiosSupervisor)
-
-                return new Promise((resolver,reject)=>{
-                    resolver(result['recordset'])
-                })
-
-            } catch (error) {
-                console.log(`Error en la extraccion de mas getDatos_sitiosSupervisor: ${error}`)
-            }
-        };
-
-        
-        const getDatos_sitiosAnalisis = async(req,res)=>{
-            try {
-                const pool = await getConnection()
-                const result = await pool.request().query(queries.getDatos_sitiosAnalisis)
-
-                return new Promise((resolver,reject)=>{
-                    resolver(result['recordset'])
-                })
-
-            } catch (error) {
-                console.log(`Error en la extraccion de mas getDatos_sitiosAnalisis: ${error}`)
-            }
         };
         const getAPSW = async (idRedJalisco,req,res)=>{
             
@@ -571,7 +543,70 @@ const document = this;
         
         };
         
-    
+        const Series1 = async  (req, res) => {
+            try {
+                
+                const pool = await getConnection();
+            
+                const result = await pool.request().query(queries.Series1)
+               // (result['recordset'][0]['Password'])
+               
+               return new Promise ((resolve,reject)=>{
+            
+                 resolve(result['recordset'])
+               })
+            
+            } catch (error) {
+                
+                console.log(error);
+            }
+        
+            };
+            const Series2 = async  (req, res) => {
+                try {
+                    
+                    const pool = await getConnectionSIA();
+                
+                    const result = await pool.request().query(queries.Series2)
+                   // (result['recordset'][0]['Password'])
+                   
+                   return new Promise ((resolve,reject)=>{
+                
+                     resolve(result['recordset'])
+                   })
+                
+                } catch (error) {
+                    
+                    console.log(error);
+                }
+            
+                };
+                const ver = async (req, res) => {       
+                    try {
+                
+                        const pool = await getConnection()
+                        const result = await pool.request()
+                        
+                       
+                        .query(queries.ver)
+                        //console.log(result)
+                        //res.json(result.recordset)
+                
+                        return new Promise((resolve,reject)=>{
+                            resolve(result['recordset']);
+                        })
+                
+                        //return res.request(result);
+                
+                        //return res.send(result.recordset);
+                
+                
+                        //res.send('index',{result});
+                        //res.json(result.recordset)
+                    } catch (error) {
+                        console.log(`error al ver${error}`)
+                    }
+                    }
     exports.getProducts = getProducts
     exports.createUser = createUser
     exports.getPassword = getPassword
@@ -593,10 +628,9 @@ const document = this;
     exports.Infousuario = Infousuario
     exports.CheckEstatus = CheckEstatus
     exports.getAPSW = getAPSW
-
-    exports.datosfotosAdminRevisar = datosfotosAdminRevisar
-    exports.borrarfotoAdminRevisar = borrarfotoAdminRevisar
-    exports.getDatos_sitiosSupervisor = getDatos_sitiosSupervisor
-    exports.enviarProtocoloAnalisis = enviarProtocoloAnalisis
-    exports.getDatos_sitiosAnalisis = getDatos_sitiosAnalisis
-
+    exports.getInformacion_protocolos =getInformacion_protocolos
+    exports.Infoid=Infoid
+    exports.Series1 = Series1
+    exports.Series2 = Series2
+    exports.ver = ver
+    exports.getInformacion_series= getInformacion_series
