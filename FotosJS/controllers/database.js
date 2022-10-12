@@ -1,4 +1,4 @@
-const {getConnection,sql} = require ('./database/conect')
+const {getConnection,getConnectionSIA,sql} = require ('./database/conect')
 const {queries} = require ('./database/query')
 
 const bcrypct = require("bcryptjs");
@@ -180,11 +180,28 @@ const document = this;
       
      
     }
-    const   Infousuario = async (username,res,req) => {  
+    const   Infousuario = async (id,res,req) => {  
        
         try{
         const pool = await getConnection()
-        const result = await pool.request().input("username", username).query(queries.infoUser)
+        const result = await pool.request().input("id", id).query(queries.infoUser)
+        
+       
+        return new Promise((resolve, reject) =>{    
+                resolve(result['recordset']) 
+        })     
+        
+        }catch(error){
+                console.log(error)
+        }
+      
+     
+    }
+    const   Infoid = async (username,res,req) => {  
+       
+        try{
+        const pool = await getConnection()
+        const result = await pool.request().input("username", username).query(queries.infoid)
         
        
         return new Promise((resolve, reject) =>{    
@@ -424,15 +441,48 @@ const document = this;
                     resolve(result['recordset']);
                 })
         
-                //return res.request(result);
-        
-                //return res.send(result.recordset);
-        
-        
-                //res.send('index',{result});
-                //res.json(result.recordset)
             } catch (error) {
                 console.log(`Error en la extraccion de informacion de INICIO: ${error}`)
+            }
+        
+        };
+        const getInformacion_protocolos = async (req,res)=>{
+            
+            try {
+                
+                const pool = await getConnection()
+                const result = await pool.request()
+                
+                .query(queries.getProtocolos)
+                //console.log(result)
+                //res.json(result.recordset)
+        
+                return new Promise((resolve,reject)=>{
+                    resolve(result['recordset']);
+                })
+        
+            } catch (error) {
+                console.log(`Error en la extraccion de informacion de informacio_Protocolos: ${error}`)
+            }
+        
+        };
+        const getInformacion_series = async (req,res)=>{
+            
+            try {
+                
+                const pool = await getConnection()
+                const result = await pool.request()
+                
+                .query(queries.getSeries)
+                //console.log(result)
+                //res.json(result.recordset)
+        
+                return new Promise((resolve,reject)=>{
+                    resolve(result['recordset']);
+                })
+        
+            } catch (error) {
+                console.log(`Error en la extraccion de informacion de Series: ${error}`)
             }
         
         };
@@ -443,7 +493,6 @@ const document = this;
                 
                 const pool = await getConnection()
                 const result = await pool.request()
-                
                 .query(queries.getTableEtiquetas)
                 //console.log(result)
                 //res.json(result.recordset)
@@ -493,7 +542,44 @@ const document = this;
         
         };
         
-    
+        const Series1 = async  (req, res) => {
+            try {
+                
+                const pool = await getConnection();
+            
+                const result = await pool.request().query(queries.Series1)
+               // (result['recordset'][0]['Password'])
+               
+               return new Promise ((resolve,reject)=>{
+            
+                 resolve(result['recordset'])
+               })
+            
+            } catch (error) {
+                
+                console.log(error);
+            }
+        
+            };
+            const Series2 = async  (req, res) => {
+                try {
+                    
+                    const pool = await getConnectionSIA();
+                
+                    const result = await pool.request().query(queries.Series2)
+                   // (result['recordset'][0]['Password'])
+                   
+                   return new Promise ((resolve,reject)=>{
+                
+                     resolve(result['recordset'])
+                   })
+                
+                } catch (error) {
+                    
+                    console.log(error);
+                }
+            
+                };
     exports.getProducts = getProducts
     exports.createUser = createUser
     exports.getPassword = getPassword
@@ -515,3 +601,8 @@ const document = this;
     exports.Infousuario = Infousuario
     exports.CheckEstatus = CheckEstatus
     exports.getAPSW = getAPSW
+    exports.getInformacion_protocolos =getInformacion_protocolos
+    exports.Infoid=Infoid
+    exports.Series1 = Series1
+    exports.Series2 = Series2
+    exports.getInformacion_series= getInformacion_series

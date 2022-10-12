@@ -1,0 +1,8 @@
+#image_drop_area{
+    width: 400px;
+    height: 500px;
+    border: 1px solid black;
+    background-position: center;
+    background-size: cover; 
+    box-sizing: border-box;
+  }

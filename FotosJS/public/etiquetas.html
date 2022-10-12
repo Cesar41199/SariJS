@@ -18,6 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.4/jspdf.plugin.autotable.min.js"></script>
     <script src="https://unpkg.com/qrious@4.0.2/dist/qrious.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
 
 </head>
 <body>
@@ -27,7 +29,7 @@
     <nav class="grey darken-4 nav-extended row ">
         <div class="nav-wrapper container col s12">
             
-          <a href="/inicio" class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
+          <a href="" class="brand-logo center"><img src="Images/Logotipo_blanco.png" width="160px" style="padding-top:10px ;" alt=""></a>
             
             
             <ul class="left">
@@ -38,29 +40,59 @@
                 
                 
                 
-            </ul>          
+            </ul> 
+            <div class="col s1 right">
+                <form action="/exit" method="post">
+                    <button class="btn grey darken-2" type="submit" >SALIR</button>
+                </form>
+            </div>          
                 
                 
         </div>
         <div class="nav-content col s12">
             <ul class="tabs tabs-transparent col s12">
-              <li class="tab col s6"><a href="/fotos">Fotos</a></li>
-              <li class="tab col s6"><a href="/inicio">Inicio</a></li>
-            
+                
+                <li class="tab col s4"><a href="/protocolos">Protocolos</a></li>
             </ul>
-          </div>
+        </div>
     </nav>
     <div>
-        <img alt='' id="codigo1">
+        <img hidden alt='' id="codigo1">
     </div>
-    <div style="overflow-x:auto;" class="container"> <!-- TABLE -->
-        
+    <div style="overflow-x:auto;background-color:rgba(0, 0, 0, 0.555);" class="container" > <!-- TABLE -->
+       <div class="row ">
+        <br>
+        <div class="col s4 offset-s4  ">
+            <input type="text" class="datepicker white-text  center"  id="datepicker" placeholder="Fecha Asignacion">
+        </div>
+        <div class="col s12 center   "  >
+           <div class="col s6 deep-purple lighten-4">
+            <p>
+                <label class="black-text">
+                  <input type="checkbox" id="SSJ" checked />
+                  <span style="font-size:medium;">SSJ</span>
+                </label>
+              </p>
+           </div>
+           <div class="col s6 deep-purple lighten-4">
+            <p>
+                <label class="black-text">
+                  <input type="checkbox" id="SEJ" />
+                  <span style="font-size:medium;">SEJ</span>
+                </label>
+              </p>
+           </div>
+        </div>
+       </div>
+       <div hidden>
+       
+       </div>
         <table class="styled-table responsive-table " id="tabla-inicio">
             <thead>
                 <tr>
                     <th>###</th>
                     <th>Sitio</th>                    
-                    <th>PDF</th>
+                   
             
                     
 

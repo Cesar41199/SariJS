@@ -5,23 +5,18 @@ const bodyParser = require('body-parser')
 const http = require("http")
 const multer = require('multer')
 const puerto = 3002
-const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW} = require ('./controllers/database')
+const host = 'localhost'
+const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,
+  MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,
+  Infousuario,CheckEstatus,getAPSW,getInformacion_protocolos,Infoid,getInformacion_series,Series1,Series2} = require ('./controllers/database')
 
 const { Console } = require('console')
 const { response } = require('express')
 const { Resolver } = require('dns')
-
-var jso
-var idRed 
-var Usuario
-var APSW
-
-var events
-var log = false
-var usuariologin
-var empresa
-var tipo
-
+const passport = require('passport')
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const PassportLocal = require('passport-local').Strategy
 
 const upload = multer({storage:multer.memoryStorage()})
 var uploadAP2 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 },{ name: 'aimagen3', maxCount:2 },{ name: 'aimagen4', maxCount:3 }])
@@ -30,147 +25,287 @@ var uploadMultiple = upload.fields([{ name: 'imagen1', maxCount:2}, { name: 'ima
 var uploadMultipleDurante = upload.fields([{ name: 'imagen1', maxCount:9}, { name: 'imagen2', maxCount:2 },{ name: 'imagen3', maxCount:2 },{ name: 'imagen4', maxCount:4 },{ name: 'imagen5', maxCount:2 },{ name: 'imagen6', maxCount:2 },{ name: 'imagen7', maxCount:1 },{ name: 'imagen8', maxCount:2 },{ name: 'imagen9', maxCount:3 }])
 var uploadMultipleDespues = upload.fields([{ name: 'imagen1', maxCount:6}, { name: 'imagen2', maxCount:1 },{ name: 'imagen3', maxCount:5 },{ name: 'imagen4', maxCount:3 },{ name: 'imagen5', maxCount:4 },{ name: 'imagen6', maxCount:5 },{ name: 'imagen7', maxCount:2 },{ name: 'imagen8', maxCount:2 },{ name: 'imagen9', maxCount:1 },,{ name: 'imagen10', maxCount:1 }])
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine','ejs')
 function server(){
     var publicPath = path.resolve(__dirname, 'public');
     app.use(express.static(publicPath));
-    app.get('/', (req, res) => {
-        res.sendFile(path.resolve(__dirname,'public/login.html'));
-      }) 
-      app.post('/login', (req, res) => {
-        res.redirect('/fotos')
-      }) 
+
+      app.use(cookieParser('mi secreto'))
+
+      app.use(session({
+        secret:'mi secreto',
+        resave:true,
+        saveUninitialized: true
+      }))
+
+      app.use(passport.initialize())
+      app.use(passport.session())
+
+     
+      passport.use(new PassportLocal(function(username,password,done){
+        getPassword(username,password).then((resultado)=>{
+          
+          if(resultado == true){
+            
+          //  Infousuario(username).then((info)=>{
+                  
+          //  })
+          done(null,username)
+            
+          }else if (resultado == false){
+            
+            done(null,false)                                   
+          }
+        })
+      }))
+      
       
 
-      app.get('/inicio', (req, res) => {
-        if(log==true){
-          res.sendFile(path.resolve(__dirname,'public/inicio.html'));
-        }else{
-          res.redirect('/')
-        }
-       
-      })
-      app.post('/exit',(req,res)=>{
-        if(log==true){
-        log=false
-        Usuario = [{
-          'us': 'Saliste correctamente',
-          'color':'green'
-        }]
-        res.redirect('/')
-      }else{
-        res.redirect('/')
-      }
-      }) 
-      app.get('/fotos', (req, res) => {
-        if(log==true){
-        res.sendFile(path.resolve(__dirname,'public/fotos.html'));
-      }else{
-        res.redirect('/')
-      }
-      })
-      app.get('/fotosantes', (req, res) => {
-        if(log==true){
-        idRed=req.query
-       const {idRedJalisco_id} = req.query
-        
-        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+      passport.serializeUser(function(user,done){
+        Infoid(user).then((id)=>{
+          id.find(object =>{
+            done(null,object.idSARIusuarios)
+          })
           
-          APSW= numEquipo          
-       })
-        res.sendFile(path.resolve(__dirname,'public/fotosantes.html'))
-      }else{
-        res.redirect('/')
-      }
-      })
-      app.get('/numEquipos', (req, res) => {
-        if(log==true){
-        res.json(APSW)
-      }else{
-        res.redirect('/')
-      }
+        })
+        
       })
 
-      app.get('/idRed', (req, res) => {
-        if(log==true){
-        res.json(idRed)
-      }else{
-        res.redirect('/')
-      }
+      passport.deserializeUser(function(id,done){
+        
+        Infousuario(id).then((user)=>{
+          done(null,user)
+        })
+        
       })
+
+      
+
+      app.get('/',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+        //SI ya se inicio
+        req.user.find(usuario=>{
+          console.log(usuario.tipo)
+          req.session.empresa = usuario.empresa
+          
+          if (usuario.tipo =='admin') {
+            res.redirect('/inicio')            
+           }else if(usuario.tipo=='supervisor'){
+            res.redirect('/supervisor')
+           }else if(usuario.tipo=='normal'){
+            res.redirect('/fotos')
+           }else if (usuario.tipo=='analisis'){
+            res.redirect('/etiquetas')  
+           }else{
+           console.log('error')
+           }
+           })
+       }) 
+       
+      app.get("/log",(req,res)=>{
+       res.render("login")
+      })
+      app.post("/loge",passport.authenticate('local',{
+        failureRedirect: '/log',
+      }),function(req,res){
+        res.redirect('/')
+      })
+
       app.get('/usuario', (req, res) => {
-        res.json(Usuario)
-        
-      })
-      app.get('/fotosdurante', (req, res) => {
-        if(log==true){
-        idRed=req.query
-        const {idRedJalisco_id} = req.query
-        
-        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+        if (req.session.us){
           
-          APSW= numEquipo          
-       })
-        res.sendFile(path.resolve(__dirname,'public/fotosdurante.html'));
-      }else{
-        res.redirect('/')
-      }
+          res.json(req.session.us)
+        }else{
+          res.json([{}])
+        }
       })
-      app.get('/fotosdespues', (req, res) => {
-        if(log==true){
-        idRed=req.query
-        const {idRedJalisco_id} = req.query
+
+
+      
+      
+
+      app.get('/inicio',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+       
+          res.sendFile(path.resolve(__dirname,'public/inicio.html'));
+       
+       
+      })
+      app.post('/exit',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },(req,res)=>{
+       
+        req.logout(function(err) {
+          if (err) { return next(err); }
+          res.redirect('/');
+        });
+      
+      }) 
+
+
+////////////////INICIO DE SESION///////////////////////////////////////////////////////
+app.get('/fotosaprovada',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
         
-        getAPSW(idRedJalisco_id).then((numEquipo)=>{
-          
-          APSW= numEquipo          
-       })
-        res.sendFile(path.resolve(__dirname,'public/fotosdespues.html'));
-      }else{
-        res.redirect('/')
-      }
-      })
-      app.get('/fotosaprovada', (req, res) => {
-        if(log==true){
         res.sendFile(path.resolve(__dirname,'public/fotosaprovada.html'));
-      }else{
-        res.redirect('/')
-      }
+    
       })
-      app.get('/supervisor', (req, res) => {
-        if(log==true){
+      app.get('/supervisor',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+      
         res.sendFile(path.resolve(__dirname,'public/supervisor.html'));
-      }else{
-        res.redirect('/')
-      }
+     
       })
-      app.get('/analisis', (req, res) => {
-        if(log==true){
+      app.get('/analisis',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+      
         res.sendFile(path.resolve(__dirname,'public/analisis.html'));
-      }else{
-        res.redirect('/')
-      }
+     
       })
-      app.get('/etiquetas', (req, res) => {
-        if(log==true){
+      app.get('/protocolos',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+       res.sendFile(path.resolve(__dirname,'public/protocolos.html'))
+      })
+      
+      app.get('/etiquetas',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+       
         res.sendFile(path.resolve(__dirname,'public/etiquetas.html'));
-      }else{
-        res.redirect('/')
-      }
+      
+      
       })
-      app.get('/check', (req, res) => {
+      app.get('/check', (req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },(req, res) => {
         res.sendFile(path.resolve(__dirname,'public/check.html'));
       })
-      app.get('/crearusuarios', (req, res) => {
-        if(log==true && tipo=='admin'){
-        res.sendFile(path.resolve(__dirname,'public/usuarios.html'))
-      }else{
-        res.redirect('/')
-      }
+      app.get('/imagen',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+        res.sendFile(path.resolve(__dirname,'public/imagen.html'))
+       })
+////////////////VISTAS REQ/////////////////////////////////////////////////////////////      
+      app.get('/fotos',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+        
+        res.sendFile(path.resolve(__dirname,'public/fotos.html'));
+     
       })
-      app.post('/checkEstatus', (req, res) => {
-        if(log==true){
+      app.get('/fotosantes',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+       
+        req.session.idRed= req.query
+        
+       const {idRedJalisco_id} = req.query
+       
+        
+        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+          
+          req.session.APSW= numEquipo  
+          
+          res.sendFile(path.resolve(__dirname,'public/fotosantes.html'))
+       })
+        
+      
+      })
+    
+      app.get('/numEquipos', (req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },(req, res) => {
+       
+        if(req.session.APSW){
+          
+          res.json(req.session.APSW)
+
+        }else{
+          
+          res.json([{}])
+        }
+
+     
+      })
+
+      app.get('/idRed',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+      
+       if (req.session.idRed){
+        res.json(req.session.idRed)
+       }
+      
+      })
+      
+      app.get('/fotosdurante',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+       
+        req.session.idRed= req.query
+        const {idRedJalisco_id} = req.query
+        
+        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+          
+          req.session.APSW= numEquipo 
+          res.sendFile(path.resolve(__dirname,'public/fotosdurante.html'));         
+       })
+        
+     
+      })
+      
+      app.get('/fotosdespues',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+       
+        req.session.idRed= req.query
+        const {idRedJalisco_id} = req.query
+        
+        getAPSW(idRedJalisco_id).then((numEquipo)=>{
+          
+          req.session.APSW= numEquipo 
+          res.sendFile(path.resolve(__dirname,'public/fotosdespues.html'));         
+       })
+       
+     
+      })
+      
+      app.get('/crearusuarios', (req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },(req, res) => {
+       
+        res.sendFile(path.resolve(__dirname,'public/usuarios.html'))
+      
+      })
+      app.post('/checkEstatus',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+        
         
         const{idRedJalisco} = req.body
 
@@ -191,12 +326,13 @@ function server(){
           
        })
 
-      }else{
-        res.redirect('/')
-      }
+     
       }) 
 
-      app.post('/register',(req,res) => {
+      app.post('/register',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },(req,res) => {
         const {nombre,apellidos,username,password, correo,empresa,tipo} = req.body;
       
        
@@ -205,63 +341,100 @@ function server(){
         res.redirect('/crearusuarios')
       });
 
-      app.post('/authenticate',(req,response) => {
+      // app.post('/authenticate',(req,response) => {
       
-        try{
-        const{username,password} = req.body;
+      //   try{
+      //   const{username,password} = req.body;
         
         
-        getPassword(username,password).then((resultado)=>{
+      //   getPassword(username,password).then((resultado)=>{
           
-          if(resultado == true){
-            console.log("Usuario correcto") 
-           Infousuario(username).then((info)=>{
-           //const obj = JSON.stringify(info)
+      //     if(resultado == true){
+      //       console.log("Usuario correcto") 
+      //      Infousuario(username).then((info)=>{
+      //      //const obj = JSON.stringify(info)
            
-           let val = ''
-           for( val of info)
+      //      let val = ''
+      //      for( val of info)
 
-           empresa= val.empresa   
-           tipo=val.tipo
-           usuariologin=username
+      //      empresa= val.empresa   
+      //      tipo=val.tipo
+      //      usuariologin=username
 
-           if (val.tipo =='admin') {
-            response.redirect('/inicio')
-           }else if(val.tipo=='supervisor'){
-            response.redirect('/supervisor')
-           }else if(val.tipo=='normal'){
-            response.redirect('/fotos')
-           }else if (val.tipo=='analisis'){
-            response.redirect('/inicio')  
-           }else{
-            response.redirect('/error')
-           }
-            log=true
-           })
+      //      if (val.tipo =='admin') {
+      //       response.redirect('/inicio')
+      //      }else if(val.tipo=='supervisor'){
+      //       response.redirect('/supervisor')
+      //      }else if(val.tipo=='normal'){
+      //       response.redirect('/fotos')
+      //      }else if (val.tipo=='analisis'){
+      //       response.redirect('/etiquetas')  
+      //      }else{
+      //       response.redirect('/error')
+      //      }
+      //       log=true
+      //      })
 
             
-          }else if (resultado == false){
-            console.log("Usuario incorrecto")
-            Usuario = [{
-              'us': "Usuario o contraseña incorrecta",
-              'color':'red'
-            }]                  
+      //     }else if (resultado == false){
+      //       console.log("Usuario incorrecto")
+      //       Usuario = [{
+      //         'us': "Usuario o contraseña incorrecta",
+      //         'color':'red'
+      //       }]                  
            
-              response.redirect('/')
+      //         response.redirect('/')
             
                      
-          }
-        })
+      //     }
+      //   })
       
-      }catch(err){
-        console.log(err)
-      }
+      // }catch(err){
+      //   console.log(err)
+      // }
       
-      });
-      
-      app.get('/tablaProvedores', (req, res) => {
+      // });
+      app.get('/tablaProtocolos',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
         try {
-          console.log(empresa)
+         
+          getInformacion_protocolos()
+          .then((tabla)=>{
+            res.json(tabla)
+          })
+        } catch (error) {
+          console.log(error)
+        }
+      })
+      app.get('/SeriesEquipos', (req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },(req, res) => {
+        try {
+         
+          getInformacion_series()
+          .then((tabla)=>{
+            res.json(tabla)
+          })
+        } catch (error) {
+          console.log(error)
+        }
+      })
+      app.get('/tablaProtocolosreq',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+     
+      })
+      app.get('/tablaProvedores',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res) => {
+        try {
+
+          empresa = req.session.empresa
           getInformacion_inicio(empresa)
           .then((tabla)=>{
             res.json(tabla)
@@ -270,11 +443,16 @@ function server(){
           console.log(error)
         }
       })
-      app.get('/tablaEtiquetas', (req, res) => {
+      app.get('/tablaEtiquetas',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      }, (req, res,next) => {
         try{
-          
+                  
+         
           getInformacion_Etiquetas()
           .then((tabla)=>{
+            
             res.json(tabla)
           })
         } catch (error) {
@@ -282,503 +460,142 @@ function server(){
         }
       })
 
-
-      app.post('/photoDB',upload.single('ProductImage'),(req,res)=>{
-        image1 = req.file.buffer.toString('base64')      
-        cam = '1'  
-        IdEvento = '8' 
-             
-        Imageupload(IdEvento,cam,image1).then(()=>{
-          res.redirect('/crearusuarios')
-        })
-  
-      })
-      
-        app.post('/ApAntes',upload.any(),(req,res,next)=>{
-          
-          const{AP}=req.body
-          console.log(AP)
-          
-          if(AP == 2){
-            console.log(req.files)
-            
-              if(req.files){
-                let imagenes=[]
-                let input=[]
-                let numEquipo=[]
-                const{idsitioAP,estatusAP,ainput1,ainput2}= req.body
-                imagenes[0]=req.files[0].buffer.toString('base64')
-                imagenes[1]=req.files[1].buffer.toString('base64')
-                imagenes[2]=req.files[2].buffer.toString('base64')
-                imagenes[3]=req.files[3].buffer.toString('base64')
-                imagenes[4]=req.files[4].buffer.toString('base64')
-                
-                
-                
-                input[0] = ainput1
-                input[1] = ainput1
-                input[2] = ainput2
-                input[3] = ainput2
-                input[4] = ainput2
-                numEquipo[0]= 2
-                numEquipo[1]= 2
-                numEquipo[2]= 2
-                numEquipo[3]= 2
-                numEquipo[4]= 2
-               
-                
-    
-                info ='Borrador'
-    
-                
-                var string = encodeURIComponent(idsitioAP);
-                  modificarEvento(idsitioAP,info,estatusAP)
-                  .then((inf2)=>{                 
-                      //console.log(`info::: ${inf}`)
-                      
-                        SelectidEstatus(idsitioAP)
-                        .then((query)=>{
-                          
-                          for(i=0;i<=4;i++){
-                           
-                          console.log(imagenes[i].length ,estatusAP,input[i],query,numEquipo[i])   
-                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
-                          .then(()=>{
-                            
-                          })
-                        }
-                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
-                        })
-                  })
-                   
-            }
-          }else if(AP == 3){
-            
-              if(req.files){
-                let imagenes=[]
-                let input=[]
-                let numEquipo=[]
-                const{idsitioAP,estatusAP,ainput1,ainput2,ainput3,ainput4}= req.body
-                imagenes[0]=req.files[0].buffer.toString('base64')
-                imagenes[1]=req.files[1].buffer.toString('base64')
-                imagenes[2]=req.files[2].buffer.toString('base64')
-                imagenes[3]=req.files[3].buffer.toString('base64')
-                imagenes[4]=req.files[4].buffer.toString('base64')
-                imagenes[5]=req.files[5].buffer.toString('base64')
-                imagenes[6]=req.files[6].buffer.toString('base64')
-                imagenes[7]=req.files[7].buffer.toString('base64')
-                imagenes[8]=req.files[8].buffer.toString('base64')
-                imagenes[9]=req.files[9].buffer.toString('base64')
-                
-                
-                input[0] = ainput1
-                input[1] = ainput1
-                input[2] = ainput2
-                input[3] = ainput2
-                input[4] = ainput2
-                input[5] = ainput3
-                input[6] = ainput3
-                input[7] = ainput4
-                input[8] = ainput4
-                input[9] = ainput4
-                
-                numEquipo[0]= 2
-                numEquipo[1]= 2
-                numEquipo[2]= 2
-                numEquipo[3]= 2
-                numEquipo[4]= 2
-                numEquipo[5]= 3
-                numEquipo[6]= 3
-                numEquipo[7]= 3
-                numEquipo[8]= 3
-                numEquipo[8]= 3
-                numEquipo[9]= 3
-                
-                info ='Borrador'
-    
-                
-                var string = encodeURIComponent(idsitioAP);
-                  modificarEvento(idsitioAP,info,estatusAP)
-                  .then((inf2)=>{                 
-                      //console.log(`info::: ${inf}`)
-                      
-                        SelectidEstatus(idsitioAP)
-                        .then((query)=>{
-                          
-                          for(i=0;i<=9;i++){
-                           
-                          
-                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
-                          .then(()=>{
-                            
-                          })
-                        }
-                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
-                        })
-                  })
-                }   
-            
-          }else{
-            console.log('no entra')
-          }
-                 
-  
-         
-        })
-        app.post('/ApDurante',upload.any(),(req,res,next)=>{
-          
-          const{AP}=req.body
-          console.log(AP)
-          
-          if(AP == 2){
-            console.log(req.files)
-            
-              if(req.files){
-                let imagenes=[]
-                let input=[]
-                let numEquipo=[]
-                const{idsitioAP,estatusAP,ainput1,ainput2}= req.body
-                imagenes[0]=req.files[0].buffer.toString('base64')
-                imagenes[1]=req.files[1].buffer.toString('base64')
-                imagenes[2]=req.files[2].buffer.toString('base64')
-                imagenes[3]=req.files[3].buffer.toString('base64')
-                
-                
-                
-                
-                input[0] = ainput1
-                input[1] = ainput1
-                input[2] = ainput2
-                input[3] = ainput2
-                
-                numEquipo[0]= 2
-                numEquipo[1]= 2
-                numEquipo[2]= 2
-                numEquipo[3]= 2
-                
-               
-                
-    
-                info ='Borrador'
-    
-                
-                var string = encodeURIComponent(idsitioAP);
-                  modificarEvento(idsitioAP,info,estatusAP)
-                  .then((inf2)=>{                 
-                      //console.log(`info::: ${inf}`)
-                      
-                        SelectidEstatus(idsitioAP)
-                        .then((query)=>{
-                          
-                          for(i=0;i<=3;i++){
-                           
-                          // console.log(imagenes[i].length ,estatusAP,input[i],query,numEquipo[i])   
-                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
-                          .then(()=>{
-                            
-                          })
-                        }
-                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
-                        })
-                  })
-                   
-            }
-          }else if(AP == 3){
-            
-              if(req.files){
-                let imagenes=[]
-                let input=[]
-                let numEquipo=[]
-                const{idsitioAP,estatusAP,ainput1,ainput2,ainput3,ainput4}= req.body
-                imagenes[0]=req.files[0].buffer.toString('base64')
-                imagenes[1]=req.files[1].buffer.toString('base64')
-                imagenes[2]=req.files[2].buffer.toString('base64')
-                imagenes[3]=req.files[3].buffer.toString('base64')
-                imagenes[4]=req.files[4].buffer.toString('base64')
-                imagenes[5]=req.files[5].buffer.toString('base64')
-                imagenes[6]=req.files[6].buffer.toString('base64')
-                imagenes[7]=req.files[7].buffer.toString('base64')
-               
-                
-                
-                
-                input[0] = ainput1
-                input[1] = ainput1
-                input[2] = ainput2
-                input[3] = ainput2
-                input[4] = ainput3
-                input[5] = ainput3
-                input[6] = ainput4
-                input[7] = ainput4
-               
-                numEquipo[0]= 2
-                numEquipo[1]= 2
-                numEquipo[2]= 2
-                numEquipo[3]= 2
-                numEquipo[4]= 3
-                numEquipo[5]= 3
-                numEquipo[6]= 3
-                numEquipo[7]= 3
+        app.post('/modificarEventoAntes' ,(req,res,next)=>{
+          if(req.isAuthenticated())return next();
+          res.redirect('/log')
+        },upload.any(),(req,res,next)=>{
+          try {
+            if(req.files){
               
+              let imagenes=[]
+              let input=[]
+              const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8,AP}= req.body
+              let string = encodeURIComponent(idsitio);
+              for(i=0;i<21;i++){
+                imagenes[i]=req.files[i].buffer.toString('base64')
                 
-                info ='Borrador'
-    
-                
-                var string = encodeURIComponent(idsitioAP);
-                  modificarEvento(idsitioAP,info,estatusAP)
-                  .then((inf2)=>{                 
-                      //console.log(`info::: ${inf}`)
-                      
-                        SelectidEstatus(idsitioAP)
-                        .then((query)=>{
-                          
-                          for(i=0;i<=7;i++){
-                           
-                          
-                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
-                          .then(()=>{
-                            
-                          })
-                        }
-                        res.redirect('/fotosdurante?idRedJalisco_id='+string)
-                        })
-                  })
-                }   
-            
-          }else{
-            console.log('no entra')
-          }
-                 
+              }              
+              input[0] = input1
+              input[1] = input1
+              input[2] = input2
+              input[3] = input2
+              input[4] = input3
+              input[5] = input3
+              input[6] = input3
+              input[7] = input3
+              input[8] = input4
+              input[9] = input4
+              input[10] = input5
+              input[11] = input5
+              input[12] = input6
+              input[13] = input6
+              input[14] = input6
+              input[15] = input7
+              input[16] = input7
+              input[17] = input7
+              input[18] = input8
+              input[19] = input8
+              input[20] = input8
   
-         
-        })
-        app.post('/ApDespues',upload.any(),(req,res,next)=>{
-          
-          const{AP}=req.body
-          console.log(AP)
-          
-          if(AP == 2){
-            console.log(req.files)
-            
-              if(req.files){
-                let imagenes=[]
-                let input=[]
-                let numEquipo=[]
-                const{idsitioAP,estatusAP,ainput1,ainput2}= req.body
-                imagenes[0]=req.files[0].buffer.toString('base64')
-                imagenes[1]=req.files[1].buffer.toString('base64')
-                
-                
-                
-                
-                input[0] = ainput1
-                input[1] = ainput2
-                
-                numEquipo[0]= 2
-                numEquipo[1]= 2
-                
-                
-    
-                info ='Borrador'
-    
-                
-                var string = encodeURIComponent(idsitioAP);
-                  modificarEvento(idsitioAP,info,estatusAP)
-                  .then((inf2)=>{                 
-                      //console.log(`info::: ${inf}`)
-                      
-                        SelectidEstatus(idsitioAP)
-                        .then((query)=>{
-                          
-                          for(i=0;i<=1;i++){
-                           
-                          // console.log(imagenes[i].length ,estatusAP,input[i],query,numEquipo[i])   
-                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
-                          .then(()=>{
-                            
-                          })
-                        }
-                        res.redirect('/fotosdespues?idRedJalisco_id='+string)
-                        })
-                  })
-                   
-            }
-          }else if(AP == 3){
-            
-              if(req.files){
-                let imagenes=[]
-                let input=[]
-                let numEquipo=[]
-                const{idsitioAP,estatusAP,ainput1,ainput2,ainput3,ainput4}= req.body
-                imagenes[0]=req.files[0].buffer.toString('base64')
-                imagenes[1]=req.files[1].buffer.toString('base64')
-                imagenes[2]=req.files[2].buffer.toString('base64')
-                imagenes[3]=req.files[3].buffer.toString('base64')
-               
-                
-                
-                input[0] = ainput1
-                input[1] = ainput2
-                input[2] = ainput3
-                input[3] = ainput4
-                
-                
-                numEquipo[0]= 2
-                numEquipo[1]= 2
-                numEquipo[2]= 3
-                numEquipo[3]= 3
-               
-                
-                info ='Borrador'
-    
-                
-                var string = encodeURIComponent(idsitioAP);
-                  modificarEvento(idsitioAP,info,estatusAP)
-                  .then((inf2)=>{                 
-                      //console.log(`info::: ${inf}`)
-                      
-                        SelectidEstatus(idsitioAP)
-                        .then((query)=>{
-                          
-                          for(i=0;i<=3;i++){
-                           
-                          
-                          Imageupload(imagenes[i],estatusAP,input[i],query,numEquipo[i])
-                          .then(()=>{
-                            
-                          })
-                        }
-                        res.redirect('/fotosaprovada?idRedJalisco_id='+string)
-                        })
-                  })
-                }   
-            
-          }else{
-            console.log('no entra')
-          }
-                 
-  
-         
-        })
-      
-      
-     
-      app.post('/modificarEventoAntes' ,uploadMultiple,(req,res,next)=>{
-        console.log('Antes')
-        try {
-          if(req.files){
-            
-            let imagenes=[]
-            let input=[]
-            const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8}= req.body
-            imagenes[0]=req.files['imagen1'][0].buffer.toString('base64')
-            imagenes[1]=req.files['imagen1'][1].buffer.toString('base64')
-            imagenes[2]=req.files['imagen2'][0].buffer.toString('base64')
-            imagenes[3]=req.files['imagen2'][1].buffer.toString('base64')
-            imagenes[4]=req.files['imagen3'][0].buffer.toString('base64')
-            imagenes[5]=req.files['imagen3'][1].buffer.toString('base64')
-            imagenes[6]=req.files['imagen3'][2].buffer.toString('base64')
-            imagenes[7]=req.files['imagen3'][3].buffer.toString('base64')
-            imagenes[8]=req.files['imagen4'][0].buffer.toString('base64')
-            imagenes[9]=req.files['imagen4'][1].buffer.toString('base64')
-            imagenes[10]=req.files['imagen5'][0].buffer.toString('base64')
-            imagenes[11]=req.files['imagen5'][1].buffer.toString('base64')
-            imagenes[12]=req.files['imagen6'][0].buffer.toString('base64')
-            imagenes[13]=req.files['imagen6'][1].buffer.toString('base64')
-            imagenes[14]=req.files['imagen6'][2].buffer.toString('base64')
-            imagenes[15]=req.files['imagen7'][0].buffer.toString('base64')
-            imagenes[16]=req.files['imagen7'][1].buffer.toString('base64')
-            imagenes[17]=req.files['imagen7'][2].buffer.toString('base64')
-            imagenes[18]=req.files['imagen8'][0].buffer.toString('base64')
-            imagenes[19]=req.files['imagen8'][1].buffer.toString('base64')
-            imagenes[20]=req.files['imagen8'][2].buffer.toString('base64')
-            
-            input[0] = input1
-            input[1] = input1
-            input[2] = input2
-            input[3] = input2
-            input[4] = input3
-            input[5] = input3
-            input[6] = input3
-            input[7] = input3
-            input[8] = input4
-            input[9] = input4
-            input[10] = input5
-            input[11] = input5
-            input[12] = input6
-            input[13] = input6
-            input[14] = input6
-            input[15] = input7
-            input[16] = input7
-            input[17] = input7
-            input[18] = input8
-            input[19] = input8
-            input[20] = input8
-
-            info ='Borrador'
-
-            
-            var string = encodeURIComponent(idsitio);
-              modificarEvento(idsitio,info,estatus)
-              .then((inf2)=>{                 
-                  //console.log(`info::: ${inf}`)
-                  
-                    SelectidEstatus(idsitio)
-                    .then((query)=>{
-                      
-                      for(i=0;i<=20;i++){
-                       
-                     
-                      Imageupload(imagenes[i],estatus,input[i],query,1)
-                      .then(()=>{
+              info ='Borrador'
+       
+                modificarEvento(idsitio,info,estatus)
+                .then(()=>{                 
+                    //console.log(`info::: ${inf}`)
+                    
+                      SelectidEstatus(idsitio)
+                      .then((query)=>{
                         
+                        for(i=0;i<21;i++){                        
+                       
+                        Imageupload(imagenes[i],estatus,input[i],query,1)
+                        .then(()=>{  
+                                               
+                          })
+                        }
+                      
                       })
-                    }
-                    res.redirect('/fotosdurante?idRedJalisco_id='+string)
-                    })
-              })
-            }        
+                })
+                if(AP != 1){   
+                  
+                  let imagenesAp = 20 
+                  let imanesstart = 21 
+                  let numEquipo=[]
+                 for(o=2;o<=AP;o++){
+                  imagenesAp= imagenesAp+5
+                 }
+                 
 
+                  const{ainput1,ainput2}= req.body
+                  for(i=21;i<=imagenesAp;i++){
+                    imagenes[i]=req.files[i].buffer.toString('base64')
+                    
+                                      
+                  }
+                 for(o=1,k=2;o<=AP;o++,k++){
+                  numEquipo[imanesstart] = k
+                  input[imanesstart] = ainput1
+                  imanesstart ++
+                  numEquipo[imanesstart] = k
+                  input[imanesstart] = ainput1
+                  imanesstart ++
+                  numEquipo[imanesstart] = k
+                  input[imanesstart] = ainput2
+                  imanesstart ++
+                  numEquipo[imanesstart] = k
+                  input[imanesstart] = ainput2
+                  imanesstart ++
+                  numEquipo[imanesstart] = k
+                  input[imanesstart] = ainput2
+                  imanesstart ++
+                 }
+     
+                  info ='Borrador'          
+                      
+                     
+                        modificarEvento(idsitio,info,estatus)
+                        .then(()=>{                 
+                            //console.log(`info::: ${inf}`)
+                            
+                              SelectidEstatus(idsitio)
+                              .then((query)=>{
+                                
+                                for(i=21;i<=imagenesAp;i++){  
+                                Imageupload(imagenes[i],estatus,input[i],query,numEquipo[i])
+                                .then(()=>{
+                                 
+                                })
+                              }
+                              res.redirect('/fotosdurante?idRedJalisco_id='+string)
+                              })
+                        })                        
+                
+                }else{
+                  
+                  res.redirect('/fotosdurante?idRedJalisco_id='+string)
+                }   
+          }        
+  
         } catch (error) {
           console.log(error);
         }
-        
       })
 
-      app.post('/modificarEventoDurante',uploadMultipleDurante,(req,res) => {
+      app.post('/modificarEventoDurante',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },upload.any(),(req,res) => {
         try {
           if(req.files){
             
             let imagenes=[]
             let input=[]
-            const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8,input9}= req.body
-            imagenes[0]=req.files['imagen1'][0].buffer.toString('base64')
-            imagenes[1]=req.files['imagen1'][1].buffer.toString('base64')
-            imagenes[2]=req.files['imagen1'][2].buffer.toString('base64')
-            imagenes[3]=req.files['imagen1'][3].buffer.toString('base64')
-            imagenes[4]=req.files['imagen1'][4].buffer.toString('base64')
-            imagenes[5]=req.files['imagen1'][5].buffer.toString('base64')
-            imagenes[6]=req.files['imagen1'][6].buffer.toString('base64')
-            imagenes[7]=req.files['imagen1'][7].buffer.toString('base64')
-            imagenes[8]=req.files['imagen1'][8].buffer.toString('base64')
-            imagenes[9]=req.files['imagen2'][0].buffer.toString('base64')
-            imagenes[10]=req.files['imagen2'][1].buffer.toString('base64')
-            imagenes[11]=req.files['imagen3'][0].buffer.toString('base64')
-            imagenes[12]=req.files['imagen3'][1].buffer.toString('base64')
-            imagenes[13]=req.files['imagen4'][0].buffer.toString('base64')
-            imagenes[14]=req.files['imagen4'][1].buffer.toString('base64')
-            imagenes[15]=req.files['imagen4'][2].buffer.toString('base64')
-            imagenes[16]=req.files['imagen4'][3].buffer.toString('base64')
-            imagenes[17]=req.files['imagen5'][0].buffer.toString('base64')
-            imagenes[18]=req.files['imagen5'][1].buffer.toString('base64')
-            imagenes[19]=req.files['imagen6'][0].buffer.toString('base64')
-            imagenes[20]=req.files['imagen6'][1].buffer.toString('base64')
-            imagenes[21]=req.files['imagen7'][0].buffer.toString('base64')
-            imagenes[22]=req.files['imagen8'][0].buffer.toString('base64')
-            imagenes[23]=req.files['imagen8'][1].buffer.toString('base64')
-            imagenes[24]=req.files['imagen9'][0].buffer.toString('base64')
-            imagenes[25]=req.files['imagen9'][1].buffer.toString('base64')
-            imagenes[26]=req.files['imagen9'][2].buffer.toString('base64')
+            const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8,input9,AP}= req.body
+              let string = encodeURIComponent(idsitio);
+              for(i=0;i<27;i++){
+                imagenes[i]=req.files[i].buffer.toString('base64')
+                
+              }
             
 
             input[0] = input1
@@ -810,26 +627,81 @@ function server(){
             input[26] = input9
 
             info ='Borrador'          
-            var string = encodeURIComponent(idsitio);
+            
 
-              modificarEvento(idsitio,info,estatus)
-              .then((inf2)=>{                 
-                  //console.log(`info::: ${inf}`)
-                  
-                    SelectidEstatus(idsitio)
-                    .then((query)=>{
-                      console.log(query)
-                      for(i=0;i<=26;i++){
-                       
-                        
-                      Imageupload(imagenes[i],estatus,input[i],query,1)
-                      .then(()=>{
-                        
+            modificarEvento(idsitio,info,estatus)
+            .then(()=>{                 
+                //console.log(`info::: ${inf}`)
+                
+                  SelectidEstatus(idsitio)
+                  .then((query)=>{
+                    
+                    for(i=0;i<27;i++){                        
+                   
+                    Imageupload(imagenes[i],estatus,input[i],query,1)
+                    .then(()=>{  
+                                           
                       })
                     }
-                    res.redirect('/fotosdespues?idRedJalisco_id='+string)
-                    })
-              })
+                  
+                  })
+            })
+            if(AP != 1){   
+                  
+              let imagenesAp = 26 
+              let imanesstart = 27 
+              let numEquipo=[]
+             for(o=2;o<=AP;o++){
+              imagenesAp= imagenesAp+4
+             }
+             
+
+              const{ainput1,ainput2}= req.body
+              for(i=27;i<=imagenesAp;i++){
+                imagenes[i]=req.files[i].buffer.toString('base64')
+                
+                                  
+              }
+             for(o=1,k=2;o<=AP;o++,k++){
+              numEquipo[imanesstart] = k
+              input[imanesstart] = ainput1
+              imanesstart ++
+              numEquipo[imanesstart] = k
+              input[imanesstart] = ainput1
+              imanesstart ++
+              numEquipo[imanesstart] = k
+              input[imanesstart] = ainput2
+              imanesstart ++
+              numEquipo[imanesstart] = k
+              input[imanesstart] = ainput2
+              imanesstart ++
+             
+             }
+ 
+              info ='Borrador'          
+                  
+                 
+                    modificarEvento(idsitio,info,estatus)
+                    .then(()=>{                 
+                        //console.log(`info::: ${inf}`)
+                        
+                          SelectidEstatus(idsitio)
+                          .then((query)=>{
+                            
+                            for(i=27;i<=imagenesAp;i++){  
+                            Imageupload(imagenes[i],estatus,input[i],query,numEquipo[i])
+                            .then(()=>{
+                             
+                            })
+                          }
+                          res.redirect('/fotosdespues?idRedJalisco_id='+string)
+                          })
+                    })                        
+            
+            }else{
+              
+              res.redirect('/fotosdespues?idRedJalisco_id='+string)
+            } 
         }
               
         } catch (error) {
@@ -838,43 +710,21 @@ function server(){
         
       })
 
-      app.post('/modificarEventoDespues',uploadMultipleDespues,(req,res) => {
+      app.post('/modificarEventoDespues',(req,res,next)=>{
+        if(req.isAuthenticated())return next();
+        res.redirect('/log')
+      },upload.any(),(req,res) => {
         try {
           if(req.files){
             
             let imagenes=[]
             let input=[]
-            const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10}= req.body
-            imagenes[0]=req.files['imagen1'][0].buffer.toString('base64')
-            imagenes[1]=req.files['imagen1'][1].buffer.toString('base64')
-            imagenes[2]=req.files['imagen1'][2].buffer.toString('base64')
-            imagenes[3]=req.files['imagen1'][3].buffer.toString('base64')
-            imagenes[4]=req.files['imagen1'][4].buffer.toString('base64')
-            imagenes[5]=req.files['imagen1'][5].buffer.toString('base64')
-            imagenes[6]=req.files['imagen2'][0].buffer.toString('base64')
-            imagenes[7]=req.files['imagen3'][0].buffer.toString('base64')
-            imagenes[8]=req.files['imagen3'][1].buffer.toString('base64')
-            imagenes[9]=req.files['imagen3'][2].buffer.toString('base64')
-            imagenes[10]=req.files['imagen3'][3].buffer.toString('base64')
-            imagenes[11]=req.files['imagen3'][4].buffer.toString('base64')
-            imagenes[12]=req.files['imagen4'][0].buffer.toString('base64')
-            imagenes[13]=req.files['imagen4'][1].buffer.toString('base64')
-            imagenes[14]=req.files['imagen4'][2].buffer.toString('base64')
-            imagenes[15]=req.files['imagen5'][0].buffer.toString('base64')
-            imagenes[16]=req.files['imagen4'][1].buffer.toString('base64')
-            imagenes[17]=req.files['imagen5'][2].buffer.toString('base64')
-            imagenes[18]=req.files['imagen5'][3].buffer.toString('base64')
-            imagenes[19]=req.files['imagen6'][0].buffer.toString('base64')
-            imagenes[20]=req.files['imagen6'][1].buffer.toString('base64')
-            imagenes[21]=req.files['imagen6'][2].buffer.toString('base64')
-            imagenes[22]=req.files['imagen6'][3].buffer.toString('base64')
-            imagenes[23]=req.files['imagen6'][4].buffer.toString('base64')
-            imagenes[24]=req.files['imagen7'][0].buffer.toString('base64')
-            imagenes[25]=req.files['imagen7'][1].buffer.toString('base64')
-            imagenes[26]=req.files['imagen8'][0].buffer.toString('base64')
-            imagenes[27]=req.files['imagen8'][1].buffer.toString('base64')
-            imagenes[28]=req.files['imagen9'][0].buffer.toString('base64')
-            imagenes[29]=req.files['imagen10'][0].buffer.toString('base64')
+            const{idsitio,estatus,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,AP}= req.body
+            let string = encodeURIComponent(idsitio);
+              for(i=0;i<30;i++){
+                imagenes[i]=req.files[i].buffer.toString('base64')
+                
+              }
             
 
             input[0] = input1
@@ -909,26 +759,74 @@ function server(){
             input[29] = input10
 
             info ='Borrador'          
-            var string = encodeURIComponent(idsitio);
-
-              modificarEvento(idsitio,info,estatus)
-              .then((inf2)=>{                 
-                  //console.log(`info::: ${inf}`)
-                  
-                    SelectidEstatus(idsitio)
-                    .then((query)=>{
-                      console.log(query)
-                      for(i=0;i<=29;i++){
-                       
-                        
-                      Imageupload(imagenes[i],estatus,input[i],query,1)
-                      .then(()=>{
-                        
+            modificarEvento(idsitio,info,estatus)
+            .then(()=>{                 
+                //console.log(`info::: ${inf}`)
+                
+                  SelectidEstatus(idsitio)
+                  .then((query)=>{
+                    
+                    for(i=0;i<30;i++){                        
+                   
+                    Imageupload(imagenes[i],estatus,input[i],query,1)
+                    .then(()=>{  
+                                           
                       })
                     }
-                    res.redirect('/fotosaprovada?idRedJalisco_id='+string)
-                    })
-              })
+                  
+                  })
+            })
+            if(AP != 1){   
+                  
+              let imagenesAp = 29 
+              let imanesstart = 30 
+              let numEquipo=[]
+             for(o=2;o<=AP;o++){
+              imagenesAp= imagenesAp+2
+             }
+             
+
+              const{ainput1,ainput2}= req.body
+              for(i=30;i<=imagenesAp;i++){
+                imagenes[i]=req.files[i].buffer.toString('base64')
+                
+                                  
+              }
+             for(o=1,k=2;o<=AP;o++,k++){
+              numEquipo[imanesstart] = k
+              input[imanesstart] = ainput1
+              imanesstart ++
+              numEquipo[imanesstart] = k
+              input[imanesstart] = ainput1
+              imanesstart ++
+              
+             
+             }
+ 
+              info ='Borrador'          
+                  
+                 
+                    modificarEvento(idsitio,info,estatus)
+                    .then(()=>{                 
+                        //console.log(`info::: ${inf}`)
+                        
+                          SelectidEstatus(idsitio)
+                          .then((query)=>{
+                            
+                            for(i=30;i<=imagenesAp;i++){  
+                            Imageupload(imagenes[i],estatus,input[i],query,numEquipo[i])
+                            .then(()=>{
+                             
+                            })
+                          }
+                          res.redirect('/fotosaprovada?idRedJalisco_id='+string)
+                          })
+                    })                        
+            
+            }else{
+              
+              res.redirect('/fotosaprovada?idRedJalisco_id='+string)
+            }
         }
               
         } catch (error) {
@@ -936,11 +834,11 @@ function server(){
         }
         
       })
+    
 
 
-
-      app.listen(puerto, () => {
-        console.log(`Servidor Web inicializado en ${puerto}`)
+      app.listen(puerto,host, () => {
+        console.log(`Servidor Web inicializado en${host}: ${puerto}`)
         
       })
 }

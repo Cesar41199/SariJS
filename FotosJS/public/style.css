@@ -8,7 +8,10 @@
         flex: 1 0 auto;
         }
     body {
-        background-color: #3b5beb ;
+      background-color: #06E0DA;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%2307cfeb' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%23059edb' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%23046eca' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%23023dba' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%23000DAA' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+      background-attachment: fixed;
+      background-size: cover;
       }
       .footer-fixed footer {
         padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -118,3 +121,34 @@
       font-size: 18px;
       font-weight: 100;
     }
+    .imagesquare{
+      width: 50px;
+      height: 50px;
+      border: 1px solid black;
+      background-position: center;
+      background-size: cover; 
+      box-sizing: border-box;
+    }
+    .red:checked{
+      top: -4px;
+      left: -3px;
+      width: 12px;
+      height: 22px;
+      border-top: 2px solid transparent;
+      border-left: 2px solid transparent;
+      border-right: 2px solid red; /* You need to change the colour here */
+      border-bottom: 2px solid red; /* And here */
+      -webkit-transform: rotate(40deg);
+      -moz-transform: rotate(40deg);
+      -ms-transform: rotate(40deg);
+      -o-transform: rotate(40deg);
+      transform: rotate(40deg);
+      -webkit-backface-visibility: hidden;
+      -webkit-transform-origin: 100% 100%;
+      -moz-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+      -o-transform-origin: 100% 100%;
+      transform-origin: 100% 100%; 
+    }
+    
+  
