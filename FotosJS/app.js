@@ -7,7 +7,7 @@ const multer = require('multer')
 const puerto = 3002
 
 
-const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW,cerrarEvento,datosfotosAdminRevisar,borrarfotoAdminRevisar,getDatos_sitiosSupervisor,getDatos_sitiosAnalisis,datosfotosAnalisisRevisar,enviarProtocoloAnalisis} = require ('./controllers/database')
+const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, getInformacion_Etiquetas,SelectidEstatus,Infousuario,CheckEstatus,getAPSW,cerrarEvento,datosfotosAdminRevisar,borrarfotoAdminRevisar,getDatos_sitiosSupervisor,enviarProtocoloAnalisis} = require ('./controllers/database')
 
 
 const { Console } = require('console')
@@ -25,11 +25,8 @@ var usuariologin
 var empresa
 var tipo
 
-let datosSupervisor;
+var datosSupervisor;
 let idSARIestatus_idGlobal;
-
-let datosAnalisis;
-let idSARIestatus_idGlobal_Analisis;
 
 const upload = multer({storage:multer.memoryStorage()})
 var uploadAP2 = upload.fields([{ name: 'aimagen1', maxCount:2}, { name: 'aimagen2', maxCount:3 },{ name: 'aimagen3', maxCount:2 },{ name: 'aimagen4', maxCount:3 }])
@@ -152,28 +149,14 @@ function server(){
       }else{
         res.redirect('/')
       }
-      });
-      app.get('/fotosAdminRevisar', (req, res) => {
-        if(log==true){
-          res.sendFile(path.resolve(__dirname,'public/fotosAdminRevisar.html'));
-        }else{
-          res.redirect('/')
-        }
-      });
+      })
       app.get('/analisis', (req, res) => {
         if(log==true){
         res.sendFile(path.resolve(__dirname,'public/analisis.html'));
       }else{
         res.redirect('/')
       }
-      });
-      app.get('/fotosAnalisisRevisar', (req, res) => {
-        if(log==true){
-        res.sendFile(path.resolve(__dirname,'public/analisisRevisarFotos.html'));
-      }else{
-        res.redirect('/')
-      }
-      });
+      })
       app.get('/etiquetas', (req, res) => {
         if(log==true){
         res.sendFile(path.resolve(__dirname,'public/etiquetas.html'));
@@ -305,6 +288,9 @@ function server(){
       })
 
       
+      app.get('/fotosAdminRevisar', (req, res) => {
+        res.sendFile(path.resolve(__dirname,'public/fotosAdminRevisar.html'));
+      })
 
       
       app.post('/datosfotosAdminRevisarVista',(req,res)=>{
@@ -380,27 +366,6 @@ function server(){
         } catch (error) {
           console.log(error);
         }
-      });
-
-      
-      app.post('/datosfotosAnalisisRevisar',(req,res)=>{
-        try {
-          const{idSARIestatus} = req.body;
-          console.log(`Entro al datosfotosAnalisisRevisar ${idSARIestatus}`)
-          idSARIestatus_idGlobal_Analisis = idSARIestatus
-          datosfotosAnalisisRevisar(idSARIestatus_idGlobal_Analisis)
-          .then((inf)=>{
-            datosAnalisis=inf
-            res.redirect('/fotosAnalisisRevisar')
-          })
-        } catch (error) {
-          console.log(error);
-        }
-      });
-
-      
-      app.get('/informacionDatosSitioAnalisis',(req,res)=>{
-        res.json(datosAnalisis)
       });
 
       app.post('/photoDB',upload.single('ProductImage'),(req,res)=>{

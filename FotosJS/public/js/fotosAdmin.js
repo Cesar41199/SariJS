@@ -1,9 +1,7 @@
 
-const dirrecionServer='http://localhost:3002/';
-
 function llenarDatosImagenes(){
     try {
-        fetch(dirrecionServer+'informacionDatosSitioSupervisor')
+        fetch('http://localhost:3002/informacionDatosSitioSupervisor')
         .then((response)=> response.json())
         .then((tablaInf)=>{
 
@@ -57,7 +55,7 @@ function llenarDatosImagenes(){
 
             for (const tablafotosAdmin of tablaInf){
                 idSARIestatus.value=tablafotosAdmin.idSARIestatus_id;
-                tituloSitio.textContent= "Sitio  " + tablafotosAdmin.idRedJalisco_id;
+                tituloSitio.textContent= "Sitio  " + tablafotosAdmin.idRedJalisco;
                 console.log(idSARIestatus)
                 if  (tablafotosAdmin.estatus == 'Antes'){
                     conteoAntes=conteoAntes+1;
@@ -155,40 +153,6 @@ function llenarDatosImagenes(){
     } catch (error) {
         
     }
-};
-
-
-function llenartabla_SitiosSupervisor() {
-    try{
-    fetch(dirrecionServer + 'getDatos_sitiosSupervisor')
-    .then((response) => response.json())
-    .then((tablaDatosSupervisor)=>{
-      //console.log(usuarios)
-      let conteo= 1
-      let tablaUsuario = document.querySelector('#tabla-inicio tbody');
-      let fecha;
-      //console.log(idAlarma_inf);
-      for (const tabla of tablaDatosSupervisor) {
-        fecha= new Date(tabla.Fecha);
-          let tr = " <tr class='other-row'> <td>"+conteo+"</td>" + 
-          "<td><form action='/datosfotosAdminRevisarVista' method=POST> <input type='hidden' name='idSARIestatus' value='"+tabla.idSARIestatus+"'> <button type='submit' class='estiloLetras'>"+ tabla.idRedJalisco +"</button></form></td>"+
-          "<td>"+tabla.estatusInfo+"</td>"+
-          "<td>"+tabla.estatusSave+"</td>"+
-          "<td>"+tabla.nombre+"</td>"+
-          "<td>"+tabla.Fecha+"</td>"+
-          "<td>"+tabla.proveedor+"</td>"+
-          "</tr>" 
-
-        tablaUsuario.innerHTML +=  tr;
-
-        conteo = conteo + 1;
-        
-      }
-    })
-  }catch(e){
-    console.log(e)
-  }
-};
+}
 
 llenarDatosImagenes();
-llenartabla_SitiosSupervisor();

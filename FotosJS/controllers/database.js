@@ -542,24 +542,6 @@ const document = this;
                 console.log(`Error en la extraccion de mas getDatos_sitiosAnalisis: ${error}`)
             }
         };
-
-        
-        const datosfotosAnalisisRevisar = async(idSARIestatus_idGlobal_Analisis,req,res)=>{
-            try {
-                const pool = await getConnection()
-                const result = await pool.request()
-                .input("idSARIestatus_idGlobal_Analisis",sql.Int,idSARIestatus_idGlobal_Analisis)
-                .query(queries.datosfotosAnalisisRevisar)
-
-                return new Promise((resolver,reject)=>{
-                    resolver(result['recordset'])
-                })
-
-            } catch (error) {
-                console.log(`Error en la extraccion de datosfotosAnalisisRevisar: ${error}`)
-            }
-        };
-
         const getAPSW = async (idRedJalisco,req,res)=>{
             
             try {
@@ -617,5 +599,4 @@ const document = this;
     exports.getDatos_sitiosSupervisor = getDatos_sitiosSupervisor
     exports.enviarProtocoloAnalisis = enviarProtocoloAnalisis
     exports.getDatos_sitiosAnalisis = getDatos_sitiosAnalisis
-    exports.datosfotosAnalisisRevisar = datosfotosAnalisisRevisar
 
