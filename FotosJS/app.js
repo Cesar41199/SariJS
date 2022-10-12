@@ -8,8 +8,11 @@ const puerto = 3002
 const host = '10.250.1.19'
 const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,
   MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,
-  Infousuario,CheckEstatus,getAPSW,getInformacion_protocolos,Infoid,getInformacion_series,Series1,Series2,ver
+  Infousuario,CheckEstatus,getAPSW,getInformacion_protocolos,Infoid,getInformacion_series,Series1,Series2,ver,
+  datosfotosAdminRevisar,borrarfotoAdminRevisar,getDatos_sitiosSupervisor,getDatos_sitiosAnalisis,
+  datosfotosAnalisisRevisar,enviarProtocoloAnalisis,analisis_MandarObservaciones,protocoloValidadoAnalisis
 } = require ('./controllers/database')
+
 
 const { Console } = require('console')
 const { response } = require('express')
@@ -18,6 +21,25 @@ const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const PassportLocal = require('passport-local').Strategy
+const { red } = require('color-name')
+///////////////////////////
+var jso
+var idRed 
+var Usuario
+var APSW
+
+var events
+var log = false
+var usuariologin
+var empresa
+var tipo
+
+let datosSupervisor;
+let idSARIestatus_idGlobal;
+
+let datosAnalisis;
+let idSARIestatus_idGlobal_Analisis;
+////////////////
 
 const upload = multer({storage:multer.memoryStorage()})
 
@@ -467,6 +489,7 @@ app.get('/fotosaprovada',(req,res,next)=>{
         }
       })
 
+
         app.post('/modificarEventoAntes' ,(req,res,next)=>{
           if(req.isAuthenticated())return next();
           res.redirect('/log')
@@ -841,6 +864,133 @@ app.get('/fotosaprovada',(req,res,next)=>{
         }
         
       })
+
+
+       /////////////////////////////////////     
+
+      
+      app.post('/datosfotosAdminRevisarVista',(req,res)=>{
+        try {
+          const{idSARIestatus} = req.body;
+          //console.log(`idsariFotos ${idSARIestatus}`)
+          idSARIestatus_idGlobal = idSARIestatus
+          datosfotosAdminRevisar(idSARIestatus_idGlobal)
+          .then((inf)=>{
+            datosSupervisor=inf
+            res.redirect('/fotosAdminRevisar')
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      });
+
+      app.post('/enviarProtocoloAnalisis',(req,res)=>{
+        try {
+          const{idSARIestatus} = req.body;
+          enviarProtocoloAnalisis(idSARIestatus)
+          .then((inf)=>{
+            res.redirect('/supervisor')
+          })
+
+        } catch (error) {
+          
+        }
+      })
+
+
+      app.post('/borrarFotoAdmin',(req,res)=>{
+        try {
+          const{idImagenEliAdmin} = req.body;
+
+          borrarfotoAdminRevisar(idImagenEliAdmin)
+          .then((infEliFoto)=>{
+              datosfotosAdminRevisar(idSARIestatus_idGlobal)
+              .then((inf)=>{
+                datosSupervisor=inf
+                res.redirect('/fotosAdminRevisar')
+            })
+          })
+
+        } catch (error) {
+          console.log(`Error app en borrarFotoAdmin :: ${error}`)
+        }
+      });
+
+      
+      app.get('/informacionDatosSitioSupervisor',(req,res)=>{
+        res.json(datosSupervisor)
+      });
+
+      
+      app.get('/getDatos_sitiosSupervisor',(req,res)=>{
+        try {
+          getDatos_sitiosSupervisor()
+          .then((inf)=>{
+            res.json(inf)
+          })
+        } catch (error) {
+          console.log(`Error app en informacionDatosSitioSupervisor :: ${error}`);
+        }
+      });
+
+      app.get('/getDatos_sitiosAnalisis',(req,res)=>{
+        try {
+          getDatos_sitiosAnalisis()
+          .then((inf)=>{
+            res.json(inf)
+          })
+        } catch (error) {
+          console.log(`Error app en getDatos_sitiosAnalisis :: ${error}`);
+        }
+      });
+
+      
+      app.post('/datosfotosAnalisisRevisar',(req,res)=>{
+        try {
+          const{idSARIestatus} = req.body;
+          console.log(`Entro al datosfotosAnalisisRevisar ${idSARIestatus}`)
+          idSARIestatus_idGlobal_Analisis = idSARIestatus
+          datosfotosAnalisisRevisar(idSARIestatus_idGlobal_Analisis)
+          .then((inf)=>{
+            datosAnalisis=inf
+            res.redirect('/fotosAnalisisRevisar')
+          })
+        } catch (error) {
+          console.log(`Error app en datosfotosAnalisisRevisar :: ${error}`);
+        }
+      });
+
+      
+      app.get('/informacionDatosSitioAnalisis',(req,res)=>{
+        res.json(datosAnalisis)
+      });
+
+
+      app.post('/regresarProtocolo_Analisis',(req,res)=>{
+        try {
+          const{txtObservacionesAnalisis,idSARIestatusObservaciones} = req.body;
+          analisis_MandarObservaciones(txtObservacionesAnalisis,idSARIestatusObservaciones)
+          .then((infObs)=>{
+            res.redirect('/analisis')
+          })
+
+        } catch (error) {
+          
+        }
+      });
+
+      app.post('/validaProtocolo_Analisis',(req,res)=>{
+        try {
+          const{idSARIestatusValida} = req.body;
+          protocoloValidadoAnalisis(idSARIestatusValida)
+          .then((infValida)=>{
+            res.redirect('/analisis')
+          })
+        } catch (error) {
+          console.log(`Error app en validaProtocolo_Analisis :: ${error}`);
+        }
+      });
+
     
 
 

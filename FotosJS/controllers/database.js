@@ -514,6 +514,7 @@ const document = this;
             }
         
         };
+
         const getAPSW = async (idRedJalisco,req,res)=>{
             
             try {
@@ -607,6 +608,85 @@ const document = this;
                         console.log(`error al ver${error}`)
                     }
                     }
+
+                    const getDatos_sitiosSupervisor = async(req,res)=>{
+                        try {
+                            const pool = await getConnection()
+                            const result = await pool.request().query(queries.getDatos_sitiosSupervisor)
+            
+                            return new Promise((resolver,reject)=>{
+                                resolver(result['recordset'])
+                            })
+            
+                        } catch (error) {
+                            console.log(`Error en la extraccion de mas getDatos_sitiosSupervisor: ${error}`)
+                        }
+                    };
+            
+                    
+                    const getDatos_sitiosAnalisis = async(req,res)=>{
+                        try {
+                            const pool = await getConnection()
+                            const result = await pool.request().query(queries.getDatos_sitiosAnalisis)
+            
+                            return new Promise((resolver,reject)=>{
+                                resolver(result['recordset'])
+                            })
+            
+                        } catch (error) {
+                            console.log(`Error en la extraccion de mas getDatos_sitiosAnalisis: ${error}`)
+                        }
+                    };
+            
+                    
+                    const datosfotosAnalisisRevisar = async(idSARIestatus_idGlobal_Analisis,req,res)=>{
+                        try {
+                            const pool = await getConnection()
+                            const result = await pool.request()
+                            .input("idSARIestatus_idGlobal_Analisis",sql.Int,idSARIestatus_idGlobal_Analisis)
+                            .query(queries.datosfotosAnalisisRevisar)
+            
+                            return new Promise((resolver,reject)=>{
+                                resolver(result['recordset'])
+                            })
+            
+                        } catch (error) {
+                            console.log(`Error en la extraccion de datosfotosAnalisisRevisar: ${error}`);
+                        }
+                    };
+            
+                    const analisis_MandarObservaciones = async(observacionesAnalisis,idSARIestatusObservaciones,req,res)=>{
+                        try {
+                            const pool = await getConnection()
+                            const result = await pool.request()
+                            .input("observacionesAnalisis",sql.VarChar,observacionesAnalisis)
+                            .input("idSARIestatusObservaciones",sql.Int,idSARIestatusObservaciones)
+                            .query(queries.analisis_MandarObservaciones)
+            
+                            return new Promise((resolver,reject)=>{
+                                resolver(result['recordset'])
+                            })
+            
+                        } catch (error) {
+                            console.log(`Error en la extraccion de analisis_MandarObservaciones: ${error}`); 
+                        }
+                    };
+            
+                    const protocoloValidadoAnalisis = async(idSARIestatus,req,res)=>{
+                        try {
+                            const pool = await getConnection()
+                            const result = await pool.request()
+                            .input("idSARIestatus",sql.Int,idSARIestatus)
+                            .query(queries.protocoloValidadoAnalisis)
+            
+                            return new Promise((resolver,reject)=>{
+                                resolver(result['recordset'])
+                            })
+            
+                        } catch (error) {
+                            console.log(`Error de dataBase en protocoloValidadoAnalisis: ${error}`);   
+                        }
+                    }
     exports.getProducts = getProducts
     exports.createUser = createUser
     exports.getPassword = getPassword
@@ -628,9 +708,21 @@ const document = this;
     exports.Infousuario = Infousuario
     exports.CheckEstatus = CheckEstatus
     exports.getAPSW = getAPSW
+
     exports.getInformacion_protocolos =getInformacion_protocolos
     exports.Infoid=Infoid
     exports.Series1 = Series1
     exports.Series2 = Series2
     exports.ver = ver
     exports.getInformacion_series= getInformacion_series
+    
+ /////////////////////////////////////////////////////////
+    exports.datosfotosAdminRevisar = datosfotosAdminRevisar
+    exports.borrarfotoAdminRevisar = borrarfotoAdminRevisar
+    exports.getDatos_sitiosSupervisor = getDatos_sitiosSupervisor
+    exports.enviarProtocoloAnalisis = enviarProtocoloAnalisis
+    exports.getDatos_sitiosAnalisis = getDatos_sitiosAnalisis
+    exports.datosfotosAnalisisRevisar = datosfotosAnalisisRevisar
+    exports.analisis_MandarObservaciones = analisis_MandarObservaciones
+    exports.protocoloValidadoAnalisis = protocoloValidadoAnalisis
+

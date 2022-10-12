@@ -121,6 +121,7 @@
       font-size: 18px;
       font-weight: 100;
     }
+
     .imagesquare{
       width: 50px;
       height: 50px;
@@ -143,7 +144,7 @@
       -ms-transform: rotate(40deg);
       -o-transform: rotate(40deg);
       transform: rotate(40deg);
-      -webkit-backface-visibility: hidden;
+      /* -webkit-backface-visibility: hidden; */
       -webkit-transform-origin: 100% 100%;
       -moz-transform-origin: 100% 100%;
       -ms-transform-origin: 100% 100%;
@@ -152,3 +153,17 @@
     }
     
   
+
+    
+    ::-webkit-input-placeholder { /* WebKit browsers */
+      color: rgba(255, 255, 255, 0.809);
+      }
+      :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color: rgba(255, 255, 255, 0.809);
+      }
+      ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color: rgba(255, 255, 255, 0.809);
+      }
+      :-ms-input-placeholder { /* Internet Explorer 10+ */
+      color: rgba(255, 255, 255, 0.809);
+      }
