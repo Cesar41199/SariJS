@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const http = require("http")
 const multer = require('multer')
 const puerto = 3002
-const host = 'localhost'
+const host = '10.250.1.19'
 const {hash,login,getPassword, getProducts,Imageupload,ShowImg,CompleteEvent,getMoreInf,getInformacion_inicio,
   MaxEstatus,MaxXsucursal,Top10Suc,modificarEvento, cerrarEvento,getInformacion_Etiquetas,SelectidEstatus,
   Infousuario,CheckEstatus,getAPSW,getInformacion_protocolos,Infoid,getInformacion_series,Series1,Series2} = require ('./controllers/database')

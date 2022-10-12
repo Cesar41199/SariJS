@@ -1,4 +1,4 @@
-let bool1=false
+﻿let bool1=false
 let bool2=false
 let bool3=false
 let bool4=false
@@ -13,7 +13,7 @@ $('#AP').hide()
 
 function idRed() {
     try{
-    fetch('http://localhost:3002/idRed')
+    fetch('http://app.grupohemac.com.mx:3002/idRed')
     .then((response) => response.json())
     .then((idRed)=>{
       //console.log(usuarios)
@@ -36,7 +36,7 @@ function idRed() {
   idRed()
   function numEquipo() {
     try{
-    fetch('http://localhost:3002/numEquipos')
+    fetch('http://app.grupohemac.com.mx:3002/numEquipos')
     .then((response) => response.json())
     .then((numEquipo)=>{
         let xAp = document.querySelector('#divfoto1')

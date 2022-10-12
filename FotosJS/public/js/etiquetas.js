@@ -74,7 +74,7 @@ try {
 }
 function llenartabla() {
     try{
-    fetch('http://localhost:3002/tablaEtiquetas')
+    fetch('http://app.grupohemac.com.mx:3002/tablaEtiquetas')
     .then((response) => response.json())
     .then((tabla)=>{
       objectollenar=tabla

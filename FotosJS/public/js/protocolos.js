@@ -4,7 +4,7 @@
   let objectoSeries
   function llenartabla() {
     try{
-    fetch('http://localhost:3002/tablaProtocolos')
+    fetch('http://app.grupohemac.com.mx:3002/tablaProtocolos')
     .then((response) => response.json())
     .then((tabla)=>{
       
@@ -280,7 +280,7 @@ $('#Todos').click(function(){
  
 function series() {
   try{
-  fetch('http://localhost:3002/SeriesEquipos')
+  fetch('http://app.grupohemac.com.mx:3002/SeriesEquipos')
   .then((response) => response.json())
   .then((tabla)=>{
 
