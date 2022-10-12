@@ -1,6 +1,8 @@
+const direcionServer='http://localhost:3002/';
+// const direcionServer='http://app.grupohemac.com.mx:3002/';
 function Usuario() {
     try{
-    fetch('http://app.grupohemac.com.mx:3002/usuario')
+    fetch(direcionServer+'usuario')
     .then((response) => response.json())
     .then((Usuario)=>{
       //console.log(usuarios)

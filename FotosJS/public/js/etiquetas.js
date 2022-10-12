@@ -14,6 +14,10 @@ $('#SSJ').click(function(){
 }) 
 
 
+const direcionServer='http://localhost:3002/';
+// const direcionServer='http://app.grupohemac.com.mx:3002/';
+
+
 let objectollenar
 
 function table(date){
@@ -74,7 +78,7 @@ try {
 }
 function llenartabla() {
     try{
-    fetch('http://app.grupohemac.com.mx:3002/tablaEtiquetas')
+    fetch(direcionServer+'tablaEtiquetas')
     .then((response) => response.json())
     .then((tabla)=>{
       objectollenar=tabla

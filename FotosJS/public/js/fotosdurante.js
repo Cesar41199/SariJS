@@ -10,10 +10,11 @@ let bool9=false
 $('#btnGuardar').hide()
 $('#btnGuardar2').hide()
 $('#AP').hide()
-
+const direcionServer='http://localhost:3002/';
+// const direcionServer='http://app.grupohemac.com.mx:3002/';
 function idRed() {
     try{
-    fetch('http://app.grupohemac.com.mx:3002/idRed')
+    fetch(direcionServer+'idRed')
     .then((response) => response.json())
     .then((idRed)=>{
       //console.log(usuarios)
@@ -36,7 +37,7 @@ function idRed() {
   idRed()
   function numEquipo() {
     try{
-    fetch('http://app.grupohemac.com.mx:3002/numEquipos')
+    fetch(direcionServer+'numEquipos')
     .then((response) => response.json())
     .then((numEquipo)=>{
         let xAp = document.querySelector('#divfoto1')

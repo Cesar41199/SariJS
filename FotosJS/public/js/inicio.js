@@ -1,6 +1,8 @@
+const direcionServer='http://localhost:3002/';
+// const direcionServer='http://app.grupohemac.com.mx:3002/';
 function llenartabla() {
     try{
-    fetch('http://app.grupohemac.com.mx:3002/tablaProvedores')
+    fetch(direcionServer='tablaProvedores')
     .then((response) => response.json())
     .then((tabla)=>{
       //console.log(usuarios)

@@ -1,5 +1,6 @@
 
 const dirrecionServer='http://localhost:3002/';
+// const dirrecionServer='http://app.grupohemac.com.mx:3002/';
 
 
 function llenartabla() {

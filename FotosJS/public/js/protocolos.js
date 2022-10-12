@@ -2,9 +2,11 @@
   let objectollenar 
   var uploaded_image;
   let objectoSeries
+  const direcionServer='http://localhost:3002/';
+// const direcionServer='http://app.grupohemac.com.mx:3002/';
   function llenartabla() {
     try{
-    fetch('http://app.grupohemac.com.mx:3002/tablaProtocolos')
+    fetch(direcionServer+'tablaProtocolos')
     .then((response) => response.json())
     .then((tabla)=>{
       
@@ -280,7 +282,7 @@ $('#Todos').click(function(){
  
 function series() {
   try{
-  fetch('http://app.grupohemac.com.mx:3002/SeriesEquipos')
+  fetch(direcionServer+'SeriesEquipos')
   .then((response) => response.json())
   .then((tabla)=>{
 
